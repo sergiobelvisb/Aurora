@@ -1,0 +1,72 @@
+nav {
+    position: relative;
+}
+nav #content{
+    z-index: 1;
+
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    height: 120px;
+    width: 70%;
+    margin: 0 auto;
+    
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 15px;
+    background-color: #9ecddf;
+    padding: 0 20px;
+}
+
+nav #logo img {
+    width: 80px;
+    height: auto;
+    
+    padding-left: 10px;
+}
+
+nav #nombre img {
+    width: 350px;
+    height: auto;
+
+    margin-left: 150px;
+}
+
+nav #login button {
+    width: 125px;
+    height: 35px;
+
+
+    background-color: #1e3937;
+    color: white;
+    font-size: 15px;
+
+    border: none;
+    border-radius: 15px;
+}
+
+nav #login button:hover {
+    transform: translateY(-3px);
+    transition-duration: 0.3s;
+}
+
+#content2 {
+    z-index: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    height: 48px;
+    width: 70%;
+    margin: 0 auto;
+    margin-top: -12px;
+
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 0 0 15px 15px;
+    background-color: #3c667f;
+    padding: 0 20px;
+}
