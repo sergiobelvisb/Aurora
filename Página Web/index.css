@@ -4,6 +4,94 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* Links */
+a {
+text-decoration: none;
+}
+
+/* Login */
+
+/* ENVOLTORIO que centra el login */
+.page-wrapper {
+    width: 100%;
+    height: 100vh;   /* Ocupa toda la pantalla */
+    
+    display: flex;               /* El centrado va AQUÍ, no en body */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor principal del login */
+.login-container {
+    background: #ffffff;
+    padding: 35px;
+    width: 350px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0, 130, 200, 0.15);
+    border: 1px solid #d8efff;
+}
+
+/* Título */
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0b74b8;
+    font-weight: 600;
+}
+
+/* Etiquetas */
+.login-form label {
+    display: block;
+    font-size: 14px;
+    color: #0a4d75;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+/* Inputs */
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #b9d8e8;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f4fbff;
+}
+
+/* Efecto médico azul elegante */
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #0b74b8;
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.3);
+}
+
+/* Botón */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #0b74b8;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Hover */
+.btn-login:hover {
+    background: #09659e;
+    box-shadow: 0 4px 15px rgba(0, 100, 160, 0.3);
+}
+
+/* Efecto clic */
+.btn-login:active {
+    transform: scale(0.98);
+}
+
 /* ========= NAVBAR ========= */
 
 .navbar {
