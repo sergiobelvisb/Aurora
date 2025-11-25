@@ -1,72 +1,101 @@
-nav {
-    position: relative;
+body {
+    background-color: #eafafe;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
-nav #content{
-    z-index: 1;
 
-    position: relative;
+/* ========= NAVBAR ========= */
+
+.navbar {
+    width: 100%;
+}
+
+/* --- Barra Superior --- */
+.top-bar {
     display: flex;
-    flex-wrap: wrap;
-    height: 120px;
-    width: 70%;
-    margin: 0 auto;
-    
-    text-align: center;
     justify-content: space-between;
     align-items: center;
-
-    border-radius: 15px;
     background-color: #9ecddf;
-    padding: 0 20px;
+    padding: 10px 20px;
+    border-radius: 15px 15px 0 0;
+    position: relative;
 }
 
-nav #logo img {
+.logo img {
     width: 80px;
-    height: auto;
-    
-    padding-left: 10px;
 }
 
-nav #nombre img {
-    width: 350px;
-    height: auto;
-
-    margin-left: 150px;
+.nombre img {
+    width: 250px;
+    max-width: 60%;
 }
 
-nav #login button {
-    width: 125px;
-    height: 35px;
-
-
+.login button {
     background-color: #1e3937;
     color: white;
-    font-size: 15px;
-
     border: none;
     border-radius: 15px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
 }
 
-nav #login button:hover {
+.login button:hover {
     transform: translateY(-3px);
-    transition-duration: 0.3s;
+    transition: 0.3s;
 }
 
-#content2 {
-    z-index: 0;
-
-    display: flex;
-    flex-wrap: wrap;
-    height: 48px;
-    width: 70%;
-    margin: 0 auto;
-    margin-top: -12px;
-
-    text-align: center;
-    justify-content: space-between;
-    align-items: center;
-
-    border-radius: 0 0 15px 15px;
+/* --- Menú inferior --- */
+/* Barra inferior normal */
+.bottom-bar {
     background-color: #3c667f;
-    padding: 0 20px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 0 0 15px 15px;
+}
+
+.bottom-bar button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 850px) {
+
+    .login {
+        display: none; /* Ocultamos botones de login para ahorrar espacio */
+    }
+
+    .bottom-bar {
+        overflow-x: auto;       /* Scroll lateral */
+        justify-content: flex-start;
+        gap: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+        scroll-behavior: smooth;
+    }
+
+    .bottom-bar::-webkit-scrollbar {
+        display: none; /* Sin barra visible → estilo moderno */
+    }
+
+    .nombre img {
+        width: 160px;
+    }
+}
+
+@media (max-width: 500px) {
+    .nombre img {
+        width: 180px;
+    }
+
+    .logo img {
+        width: 60px;
+    }
 }
