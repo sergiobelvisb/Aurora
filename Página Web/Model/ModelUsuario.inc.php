@@ -6,12 +6,13 @@ class ModelUsuario extends Model {
     }
 
     public function listadoUsuarios(){
-        return $this->query("SELECT * FROM user");
+        return $this->query("SELECT * FROM usuarios_medicos");
     }
 
-    public function comprobarUsuario($username, $password){
-        if($this->query("SELECT id FROM user WHERE username = ?", [$username]) !== NULL){
-            $password_hash = $this->query("SELECT password FROM user WHERE username = ?", [$username])[0]['password'];
+    public function comprobarUsuario($email, $password){
+        $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
+        if($this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]) !== NULL){
+            $password_hash = $this->query("SELECT password FROM usuarios_medicos WHERE email = ?", [$email])[0]['password'] ?? "";
             if(password_verify($password, $password_hash)){
                 return true;
             } else {
@@ -20,13 +21,13 @@ class ModelUsuario extends Model {
         }
     }
 
-    public function getID($username){
-        $res = $this->query("SELECT id FROM user WHERE username = ?", [$username]);
-        return $res[0]['id'] ?? null;
+    public function getID($email){
+        $res = $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
+        return $res[0]['userID'] ?? null;
     }
 
     public function getUsername($id){
-        $res = $this->query("SELECT username FROM user WHERE id = ?", [$id]);
+        $res = $this->query("SELECT username FROM usuarios_medicos WHERE userID = ?", [$id]);
         return $res[0]['username'] ?? null;
     }
 
@@ -46,7 +47,7 @@ class ModelUsuario extends Model {
     }
 
     public function getACL($id){
-        $res = $this->query("SELECT acl FROM user WHERE id = ?", [$id]);
+        $res = $this->query("SELECT acl FROM usuarios_medicos WHERE userID = ?", [$id]);
         return $res[0]['acl'] ?? null;
     }
 
