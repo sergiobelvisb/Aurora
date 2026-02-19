@@ -16,6 +16,7 @@ USE aurora;
 -- 2. Tabla: usuarios_medicos
 CREATE TABLE IF NOT EXISTS usuarios_medicos (
     userID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL, -- Espacio para hash de seguridad
     nombre VARCHAR(100) NOT NULL,
@@ -58,4 +59,5 @@ CREATE TABLE IF NOT EXISTS sesiones (
     FOREIGN KEY (userID) REFERENCES usuarios_medicos(userID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (pacienteID) REFERENCES pacientes(pacienteID) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
+
 
