@@ -1,1 +1,104 @@
+/* ============================= */
+/* VARIABLES DE MARCA */
+/* ============================= */
 
+:root {
+    --aurora-primary: #355a6d;
+    --aurora-secondary: #5286b3;
+    --aurora-accent: #11271a;
+    --aurora-dark: #181818;
+    --aurora-light-bg: #f4f7fa;
+}
+
+/* ============================= */
+/* TIPOGRAFÍA PREMIUM */
+/* ============================= */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--aurora-light-bg);
+    color: var(--aurora-dark);
+    margin: 0;
+}
+
+h1, h2, h3, h4, .navbar-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.5px;
+}
+
+h1 {
+    font-size: 2.8rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+h5 {
+    font-weight: 600;
+}
+
+p {
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+/* ============================= */
+/* NAVBAR */
+/* ============================= */
+
+.navbar {
+    background-color: var(--aurora-secondary);
+}
+
+.navbar-brand img {
+    max-height: 50px;
+    width: auto;
+}
+
+.navbar .nav-link {
+    border: 2px solid var(--aurora-dark);
+    color: var(--aurora-dark) !important;
+    border-radius: 8px;
+    padding: 6px 15px;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Hover */
+.navbar .nav-link:hover {
+    background-color: var(--aurora-white); 
+    color: var(--aurora-white) !important; 
+    text-decoration: none;
+}
+
+.navbar-nav .nav-link {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+}
+
+
+/* ============================= */
+/* BOTONES */
+/* ============================= */
+
+.btn-primary {
+    background-color: var(--aurora-primary);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--aurora-secondary);
+}
+
+/* ============================= */
+/* TARJETAS GENERALES */
+/* ============================= */
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
