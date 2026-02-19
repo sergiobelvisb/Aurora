@@ -6,6 +6,7 @@ USE aurora;
 -- Almacena la información de los profesionales que usan la aplicación [cite: 26, 40]
 CREATE TABLE usuarios_medicos (
     userID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL, -- Espacio para hash de seguridad
     nombre VARCHAR(100) NOT NULL,
@@ -50,4 +51,5 @@ CREATE TABLE sesiones (
     datos_eeg VARCHAR(255), -- Suficiente para muestras de ~30 caracteres en defensa
     FOREIGN KEY (userID) REFERENCES usuarios_medicos(userID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (pacienteID) REFERENCES pacientes(pacienteID) ON DELETE CASCADE ON UPDATE CASCADE
+
 ) ENGINE=InnoDB;
