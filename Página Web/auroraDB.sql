@@ -1,12 +1,10 @@
 -- 1. Crear el usuario adminAuroraDB y darle permisos
-CREATE USER IF NOT EXISTS 'adminAuroraDB'@'localhost' IDENTIFIED BY 'adminAuroraDB';
 CREATE USER IF NOT EXISTS 'adminAuroraDB'@'%' IDENTIFIED BY 'adminAuroraDB';
 
 -- Crear la base de datos aurora
 CREATE DATABASE IF NOT EXISTS aurora;
 
 -- Otorgar todos los permisos del usuario sobre la base de datos aurora
-GRANT ALL PRIVILEGES ON aurora.* TO 'adminAuroraDB'@'localhost';
 GRANT ALL PRIVILEGES ON aurora.* TO 'adminAuroraDB'@'%';
 
 -- Aplicar los cambios de permisos
@@ -60,3 +58,4 @@ CREATE TABLE IF NOT EXISTS sesiones (
     FOREIGN KEY (userID) REFERENCES usuarios_medicos(userID) ON DELETE RESTRICT ON UPDATE CASCADE,
     FOREIGN KEY (pacienteID) REFERENCES pacientes(pacienteID) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB;
+
