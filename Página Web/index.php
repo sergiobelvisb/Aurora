@@ -17,7 +17,7 @@ $http = new HTTPComponent();
 if(isset($http->getRequest()->getGet()['controller']) && !empty($http->getRequest()->getGet()))
     $controller = $http->getRequest()->getGet('controller');
 // Si no se especifica ningún controlador, usar 'Login' por defecto
-else $controller = 'LogIn';
+else $controller = 'Principal';
 
 // Incluir el archivo del controlador correspondiente.
 if(file_exists('Controller/Controller' . $controller . '.inc.php'))
