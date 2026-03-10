@@ -1,42 +1,28 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Mar 10, 2026 at 04:15 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Eliminar la base de datos si ya existe
+DROP DATABASE IF EXISTS `aurora`;
+CREATE DATABASE `aurora` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `aurora`;
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
+-- Eliminar usuario si ya existe
+DROP USER IF EXISTS 'adminAuroraDB'@'localhost';
+CREATE USER 'adminAuroraDB'@'localhost' IDENTIFIED BY 'adminAuroraDB';
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `aurora`
---
+-- Dar todos los privilegios al usuario sobre la base de datos aurora
+GRANT ALL PRIVILEGES ON `aurora`.* TO 'adminAuroraDB'@'localhost';
+FLUSH PRIVILEGES;
 
 -- --------------------------------------------------------
-
---
 -- Table structure for table `hospitales`
---
+-- --------------------------------------------------------
 
 CREATE TABLE `hospitales` (
-  `hospitalID` int(255) NOT NULL,
+  `hospitalID` int(255) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
-  `ubicacion` varchar(255) NOT NULL
+  `ubicacion` varchar(255) NOT NULL,
+  PRIMARY KEY (`hospitalID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `hospitales`
---
-
+-- Insertar hospitales
 INSERT INTO `hospitales` (`hospitalID`, `nombre`, `ubicacion`) VALUES
 (1, 'Hospital Universitario La Paz', 'Madrid'),
 (2, 'Hospital 12 de Octubre', 'Madrid'),
@@ -76,46 +62,46 @@ INSERT INTO `hospitales` (`hospitalID`, `nombre`, `ubicacion`) VALUES
 (47, 'Hospital Sant Joan de Déu', 'Cataluña');
 
 -- --------------------------------------------------------
-
---
 -- Table structure for table `pacientes`
---
+-- --------------------------------------------------------
 
 CREATE TABLE `pacientes` (
-  `pacienteID` int(10) UNSIGNED NOT NULL,
+  `pacienteID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
   `apellido1` varchar(100) NOT NULL,
   `apellido2` varchar(100) DEFAULT NULL,
   `telefono` varchar(25) DEFAULT NULL,
   `fecha_de_nacimiento` date NOT NULL,
-  `direccion` varchar(255) DEFAULT NULL
+  `direccion` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`pacienteID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
-
---
 -- Table structure for table `sesiones`
---
+-- --------------------------------------------------------
 
 CREATE TABLE `sesiones` (
-  `sesionID` int(10) UNSIGNED NOT NULL,
+  `sesionID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `userID` int(10) UNSIGNED NOT NULL,
   `pacienteID` int(10) UNSIGNED NOT NULL,
   `fecha_hora_inicio` datetime NOT NULL,
   `fecha_hora_fin` datetime NOT NULL,
   `notas_medicas` varchar(255) DEFAULT NULL,
   `duracion` time DEFAULT NULL,
-  `datos_eeg` varchar(255) DEFAULT NULL
+  `datos_eeg` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`sesionID`),
+  KEY `userID` (`userID`),
+  KEY `pacienteID` (`pacienteID`),
+  CONSTRAINT `sesiones_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `usuarios_medicos` (`userID`) ON UPDATE CASCADE,
+  CONSTRAINT `sesiones_ibfk_2` FOREIGN KEY (`pacienteID`) REFERENCES `pacientes` (`pacienteID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
-
---
 -- Table structure for table `usuarios_medicos`
---
+-- --------------------------------------------------------
 
 CREATE TABLE `usuarios_medicos` (
-  `userID` int(10) UNSIGNED NOT NULL,
+  `userID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -123,95 +109,16 @@ CREATE TABLE `usuarios_medicos` (
   `apellido1` varchar(100) NOT NULL,
   `apellido2` varchar(100) DEFAULT NULL,
   `acl` enum('Administrador','Medico','Tecnico') NOT NULL DEFAULT 'Medico',
-  `hospitalID` int(11) DEFAULT NULL
+  `hospitalID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`userID`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`),
+  KEY `fk_hospitalID` (`hospitalID`),
+  CONSTRAINT `fk_hospitalID` FOREIGN KEY (`hospitalID`) REFERENCES `hospitales` (`hospitalID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `usuarios_medicos`
---
-
-INSERT INTO `usuarios_medicos` (`userID`, `email`, `username`, `password`, `nombre`, `apellido1`, `apellido2`, `acl`, `hospitalID`) VALUES
-(1, 'sergiobelvisb@gmail.com', 'SergioBelvis', '$2y$10$lVL0VkNF8x5j5gzu5slHhuliAqpun31Kvccl0Ls.Ex.OCv6j3YHBG', 'Sergio', 'Belvís', 'Barba', 'Administrador', 2);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `hospitales`
---
-ALTER TABLE `hospitales`
-  ADD PRIMARY KEY (`hospitalID`);
-
---
--- Indexes for table `pacientes`
---
-ALTER TABLE `pacientes`
-  ADD PRIMARY KEY (`pacienteID`);
-
---
--- Indexes for table `sesiones`
---
-ALTER TABLE `sesiones`
-  ADD PRIMARY KEY (`sesionID`),
-  ADD KEY `userID` (`userID`),
-  ADD KEY `pacienteID` (`pacienteID`);
-
---
--- Indexes for table `usuarios_medicos`
---
-ALTER TABLE `usuarios_medicos`
-  ADD PRIMARY KEY (`userID`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `fk_hospitalID` (`hospitalID`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `hospitales`
---
-ALTER TABLE `hospitales`
-  MODIFY `hospitalID` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
-
---
--- AUTO_INCREMENT for table `pacientes`
---
-ALTER TABLE `pacientes`
-  MODIFY `pacienteID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `sesiones`
---
-ALTER TABLE `sesiones`
-  MODIFY `sesionID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `usuarios_medicos`
---
-ALTER TABLE `usuarios_medicos`
-  MODIFY `userID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `sesiones`
---
-ALTER TABLE `sesiones`
-  ADD CONSTRAINT `sesiones_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `usuarios_medicos` (`userID`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `sesiones_ibfk_2` FOREIGN KEY (`pacienteID`) REFERENCES `pacientes` (`pacienteID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `usuarios_medicos`
---
-ALTER TABLE `usuarios_medicos`
-  ADD CONSTRAINT `fk_hospitalID` FOREIGN KEY (`hospitalID`) REFERENCES `hospitales` (`hospitalID`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- --------------------------------------------------------
+-- Insertar usuario administrador
+-- --------------------------------------------------------
+INSERT INTO `usuarios_medicos` (`email`, `username`, `password`, `nombre`, `apellido1`, `apellido2`, `acl`, `hospitalID`)
+VALUES ('admin@aurora.com', 'adminAuroraDB', SHA2('adminAuroraDB', 256), 'Admin', 'Aurora', '', 'Administrador', NULL);
