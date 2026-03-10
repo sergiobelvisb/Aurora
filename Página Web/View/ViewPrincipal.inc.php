@@ -7,7 +7,6 @@
         <button class="btn btn-primary btn-lg mt-4">Acceder a la plataforma</button>
     </div>
 </section>
-    
 
 <!-- MÉTRICAS -->
 <section class="py-5 text-center bg-white">

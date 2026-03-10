@@ -4,7 +4,7 @@
         No tienes permisos para acceder a esta página o la página que buscas no existe.
     </p>
 
-    <a href="<?= $http->getUrlBase();?>/LogIn" onclick="<?=session_unset(); session_destroy()?>">
+    <a href="<?= $http->getUrlBase();?>">
         <button class="actions">Volver</button>
     </a>
 </main>

@@ -20,7 +20,7 @@ class LogOut extends Controller
     public function index()
     {
         $this->http->getResponse()->getSession()->destroy();
-        $this->http->getResponse()->redirect($this->http->getUrlBase()."/LogIn");
+        $this->http->getResponse()->redirect($this->http->getUrlBase());
     }
 
 }

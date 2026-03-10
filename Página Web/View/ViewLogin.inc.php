@@ -12,12 +12,12 @@
         <form action="<?=$http->getUrlBase()?>/Login/comprobarSesion" method="POST">
             <div class="mb-3">
                 <label for="email" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="usuario@ejemplo.com" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="usuario@ejemplo.com"  value="<?=$data['formData']['email'] ?? ''?>">
             </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="********" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="********">
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -32,7 +32,7 @@
         </form>
 
         <div class="mt-4 text-center">
-            <p>¿No tienes cuenta? <a href="#">Regístrate aquí</a></p>
+            <p>¿No tienes cuenta? <a href="<?=$http->getUrlBase()?>/Registro">Regístrate aquí</a></p>
         </div>
     </div>
 </div>

@@ -54,6 +54,10 @@
 }
 
 /* Checkbox label */
+.form-check {
+    margin-right: 15px;
+}
+
 .form-check-label {
     font-size: 0.9rem;
 }
