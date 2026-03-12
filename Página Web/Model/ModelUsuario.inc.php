@@ -64,6 +64,50 @@ class ModelUsuario extends Model {
             return false;
         }
     }
+
+    public function getNombreCompleto($id){
+        $res = $this->query("SELECT nombre, apellido1, apellido2 FROM usuarios_medicos WHERE userID = ?", [$id])[0];
+        return $res['nombre'] . " " . $res['apellido1'] . " " . $res['apellido2']; 
+    }
+
+    public function getEmail($id){
+        return $this->query("SELECT email FROM usuarios_medicos WHERE userID = ?", [$id])[0]['email'];
+    }
+
+    public function getHospital($id){
+        return $this->query("SELECT h.nombre AS hospital FROM usuarios_medicos u JOIN hospitales h ON u.hospitalID = h.hospitalID WHERE u.userID = ?", [$id])[0]['hospital'];
+    }
+
+    public function getHospitales() {
+        return $this->query("SELECT * FROM hospitales ORDER BY nombre ASC");
+    }
+
+    public function existeEmail($email){
+        $res = $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
+        return !empty($res);
+    }
+
+    public function existeUsername($username){
+        $res = $this->query("SELECT userID FROM usuarios_medicos WHERE username = ?", [$username]);
+        return !empty($res);
+    }
+
+    public function registrarUsuario($username, $nombre, $apellido1, $apellido2, $email, $password, $hospitalID){
+
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        return $this->query(
+            "INSERT INTO usuarios_medicos 
+            (username, nombre, apellido1, apellido2, email, password, hospitalID)
+            VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [$username, $nombre, $apellido1, $apellido2, $email, $passwordHash, $hospitalID]
+        );
+    }
+
+    public function usuarioExiste($email){
+        $res = $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
+        return !empty($res);
+    }
 }
 
 ?>

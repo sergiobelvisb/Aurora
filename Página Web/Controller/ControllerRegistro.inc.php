@@ -1,9 +1,5 @@
 <?php
-/**
- * Clase Principal que extiende de Controller.
- * Esta clase maneja la lógica para la página principal.
- * Contiene un método index que muestra un mensaje de bienvenida.
- */
+
 class Registro extends Controller
 {
     /**
@@ -17,26 +13,87 @@ class Registro extends Controller
     /**
      * Método index que muestra un mensaje de bienvenida.
      */
-    public function index()
-    {
+    public function index($param_data = ""){
+        loadModel::load('Usuario');
+        $modelo = new ModelUsuario();
+
         $data = [
-            /*'extraCSS' => "<link rel='stylesheet' href='" . $this->http->getUrlBase() . "/public/css/registro.css'> <br> 
-            <link href='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' rel='stylesheet' />",*/
-            'extraCSS' => "<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css'> <br>
-                           <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'> <br>
-                           <link rel='stylesheet' href='" . $this->http->getUrlBase() . "/public/css/registro.css'>",
-
-            /*'extraJS' => "<script src='" . $this->http->getUrlBase() . "/public/js/registro.js'></script> <br>
-            <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script> <br>
-            <script src='https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'></script>"*/
-            'extraJS' => "<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'></script> <br>
-                          <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js'></script> <br>
-                          <script src='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js'></script>",
-
-            'hospitales' => require(__DIR__ . '/../data/hospitales.php')
+            'extraCSS' => "<link rel='stylesheet' href='" . $this->http->getUrlBase() . "/public/css/registro.css'>",
+            'hospitales' => $modelo->getHospitales(),
+            'error' => ""
         ];
 
+        if($param_data !== ""){
+            $data['error'] = $param_data;
+        }
+
         $viewUsuario = new Layout('Registro', $data);
+    }
+
+    public function registrarUsuario(){
+
+        loadModel::load('Usuario');
+        $modelo = new ModelUsuario();
+
+        if ($this->http->getRequest()->getServer("REQUEST_METHOD") === "POST") {
+
+            $username  = $this->http->getRequest()->getPost('username');
+            $nombre    = $this->http->getRequest()->getPost('nombre');
+            $apellido1 = $this->http->getRequest()->getPost('apellido1');
+            $apellido2 = $this->http->getRequest()->getPost('apellido2');
+            $email     = $this->http->getRequest()->getPost('email');
+            $password  = $this->http->getRequest()->getPost('password');
+            $password2 = $this->http->getRequest()->getPost('password2');
+            $hospital  = $this->http->getRequest()->getPost('hospital');
+
+
+            /* VALIDACIONES */
+
+            if(empty($username) || empty($nombre) || empty($apellido1) || empty($email) || empty($password) || empty($password2) || empty($hospital)){
+                $this->index("Todos los campos obligatorios deben rellenarse.");
+                return;
+            }
+
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $this->index("El correo electrónico no es válido.");
+                return;
+            }
+
+            if($password !== $password2){
+                $this->index("Las contraseñas no coinciden.");
+                return;
+            }
+
+            if($modelo->existeEmail($email)){
+                $this->index("Ya existe una cuenta con ese correo.");
+                return;
+            }
+
+            if($modelo->existeUsername($username)){
+                $this->index("Ese nombre de usuario ya está en uso.");
+                return;
+            }
+
+
+            /* REGISTRO */
+
+            $res = $modelo->registrarUsuario(
+                $username,
+                $nombre,
+                $apellido1,
+                $apellido2,
+                $email,
+                $password,
+                $hospital
+            );
+
+            if($res){
+                $this->http->getResponse()->redirect($this->http->getUrlBase()."/Login");
+                exit;
+            } else {
+                $this->index("Error al registrar el usuario.");
+            }
+        }
     }
 }
 

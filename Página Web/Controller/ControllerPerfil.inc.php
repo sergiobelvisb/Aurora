@@ -14,6 +14,7 @@ class Perfil extends Controller
     {
         parent::__construct();
     }
+
     /**
      * Método index que muestra un mensaje de bienvenida.
      */
@@ -21,67 +22,21 @@ class Perfil extends Controller
     {
         loadModel::load('Usuario');
         $modelo = new ModelUsuario();
-
         $id = $this->http->getResponse()->getSession()->get('id');
-        $usuario = $this->http->getResponse()->getSession()->get('usuario');
-        $acl = $this->http->getResponse()->getSession()->get('acl');
-        $fotodeperfil = $this->http->getUrlBase() .  $modelo->getImage($id);
 
         $data = [
-            'id' => $id,
-            'usuario' => $usuario,
-            'acl' => $acl,
-            'fotodeperfil' => $fotodeperfil
+            'extraCSS' => "<link rel='stylesheet' href='public/css/perfil.css'>",
+            'userData' => [
+                'id' => $id,
+                'username' => $modelo->getUsername($id),
+                'nombreCompleto' => $modelo->getNombreCompleto($id),
+                'email' => $modelo->getEmail($id),
+                'hospital' => $modelo->getHospital($id),
+                'acl' => $modelo->getACL($id)
+            ]
         ];
 
         $viewUsuario = new Layout('Perfil', $data);
-    }
-
-    public function ConfPerfil(){
-        loadModel::load('Usuario');
-        $modelo = new ModelUsuario();
-
-        $id = $this->http->getResponse()->getSession()->get('id');
-        $usuario = $modelo->getUsername($id);
-        $acl = $modelo->getACL($id);
-        $fotodeperfil = $this->http->getUrlBase() .  $modelo->getImage($id);
-        $admin = false;
-
-        if($acl === "admin"){
-            $admin = true;
-        }
-
-        $data = [
-            'id' => $id,
-            'usuario' => $usuario,
-            'acl' => $acl,
-            'fotodeperfil' => $fotodeperfil,
-            'admin' => $admin
-        ];
-
-        $viewUsuario = new Layout('ConfPerfil', $data);
-    }
-
-    public function ActualizarPerfil(){
-        loadModel::load('Usuario');
-        $modelo = new ModelUsuario();
-        $id = $this->http->getResponse()->getSession()->get('id');
-        $usuario = $this->http->getResponse()->getSession()->get('usuario');
-        $nuevoNombre = $usuario . ".jpg";
-
-        if ($this->http->getRequest()->getServer("REQUEST_METHOD") === "POST") {
-            if($this->http->getRequest()->getFiles() !== 0){
-                move_uploaded_file($this->http->getRequest()->getFiles("foto_perfil")["tmp_name"], "public/img/pfp/" . $nuevoNombre);
-                $modelo->setImagen($id, $nuevoNombre);
-            }
-
-            if($this->http->getRequest()->getPost('username') !== 0){
-                $nombre = $this->http->getRequest()->getPost('username');
-                $modelo->setUsername($id, $usuario, $nombre);
-            }
-            
-            $this->http->getResponse()->redirect($this->http->getUrlBase()."/Perfil");
-        }
     }
 
 }
