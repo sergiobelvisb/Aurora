@@ -31,15 +31,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent"> <br>
             <div class="navbar-nav ms-auto align-items-center">
                 <a class="nav-link" href="<?=$http->getUrlBase()?>/Tecnologia">Tecnología</a>
+
                 <a class="nav-link" href="<?=$http->getUrlBase()?>/Profesionales">Profesionales</a>
-                <?php if(isset($_SESSION['id'])): ?>
-                    <?php if($_SESSION['id'] === 'Administrador'): ?>
+
+                <?php if($http->getResponse()->getSession()->get('id') !== NULL): ?>
+                    <?php if($http->getResponse()->getSession()->get('id') === 'Administrador'): ?>
                         <a class="nav-link" href="<?=$http->getUrlBase()?>/VistaAdmin">Vista Admin</a>
                     <?php endif; ?>
+
                 <a class="nav-link" href="<?=$http->getUrlBase()?>/PanelControl">Panel de Control</a>
+
                 <div class="dropdown">
                     <a class="nav-link profile-btn dropdown-toggle d-flex align-items-center" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<?=$http->getUrlBase()?>/public/img/pfp/default.png" class="profile-img me-2" alt="Foto perfil">
+                        <img src="<?=$http->getUrlBase() . $http->getResponse()->getSession()->get('foto') ?>" class="profile-img me-2" alt="Foto perfil">
+
                         <span><?=$http->getResponse()->getSession()->get('nombreCompleto')?></span>
                     </a>
 

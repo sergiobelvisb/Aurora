@@ -39,17 +39,18 @@ class Registro extends Controller
 
             $username  = $this->http->getRequest()->getPost('username');
             $nombre    = $this->http->getRequest()->getPost('nombre');
-            $apellido1 = $this->http->getRequest()->getPost('apellido1');
-            $apellido2 = $this->http->getRequest()->getPost('apellido2');
+            $apellidos = $this->http->getRequest()->getPost('apellidos');
             $email     = $this->http->getRequest()->getPost('email');
             $password  = $this->http->getRequest()->getPost('password');
             $password2 = $this->http->getRequest()->getPost('password2');
             $hospital  = $this->http->getRequest()->getPost('hospital');
 
+            $nombre = $nombre . " " . $apellidos;
+
 
             /* VALIDACIONES */
 
-            if(empty($username) || empty($nombre) || empty($apellido1) || empty($email) || empty($password) || empty($password2) || empty($hospital)){
+            if(empty($username) || empty($nombre) || empty($email) || empty($password) || empty($hospital)){
                 $this->index("Todos los campos obligatorios deben rellenarse.");
                 return;
             }
@@ -80,8 +81,6 @@ class Registro extends Controller
             $res = $modelo->registrarUsuario(
                 $username,
                 $nombre,
-                $apellido1,
-                $apellido2,
                 $email,
                 $password,
                 $hospital

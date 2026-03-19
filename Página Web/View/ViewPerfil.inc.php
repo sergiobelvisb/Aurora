@@ -9,54 +9,106 @@
 
                     <div class="card-body">
                         <div class="text-center mb-4">
-                            <img src="<?=$http->getUrlBase()?>/public/img/pfp/default.png" class="profile-img-large mb-3">
+                            <img src="<?=$http->getUrlBase().$data['userData']['image'].'?t='.time()?>" class="profile-img-large mb-3">
 
                             <br>
 
-                            <a href="<?=$http->getUrlBase()?>/Perfil/cambiarFoto" class="btn btn-outline-primary btn-sm">
-                                Cambiar foto
-                            </a>
-                        </div>
-                        <div class="profile-field">
-                            <div>
-                                <strong>Nombre completo</strong><br>
-                                <?=$data['userData']['nombreCompleto']?>
-                            </div>
+                            <form action="<?=$http->getUrlBase()?>/Perfil/cambiarFoto" method="post" enctype="multipart/form-data">
+                                <input type="file" id="Foto" name="Foto" accept=".png" onchange="this.form.submit()" hidden>
 
-                            <a href="<?=$http->getUrlBase()?>/Perfil/editarNombre" class="btn btn-outline-secondary btn-sm">
-                                Editar
-                            </a>
+                                <label for="Foto" class="btn btn-outline-primary btn-sm">
+                                    Cambiar Foto
+                                </label>
+                            </form>
                         </div>
-                        <div class="profile-field">
-                            <div>
-                                <strong>Email</strong><br>
-                                <?=$data['userData']['email']?>
-                            </div>
 
-                            <a href="<?=$http->getUrlBase()?>/Perfil/editarEmail" class="btn btn-outline-secondary btn-sm">
-                                Editar
-                            </a>
-                        </div>
-                        <div class="profile-field">
-                            <div>
-                                <strong>Hospital</strong><br>
-                                <?=$data['userData']['hospital']?>
-                            </div>
+                        <?php foreach($data['camposEditables'] as $campo => $config): ?>
+                            <div class="profile-field">
+                                <div>
+                                    <strong><?=$config['label']?></strong><br>
+                                    <?php   
+                                        if($campo === 'password'){
+                                            echo '*******';
+                                        } else {
+                                            echo $data['userData'][$campo];
+                                        }
+                                    
+                                    ?>
+                                </div>
 
-                            <a href="<?=$http->getUrlBase()?>/Perfil/editarHospital" class="btn btn-outline-secondary btn-sm">
-                                Editar
-                            </a>
-                        </div>
-                        <div class="profile-field">
-                            <div>
-                                <strong>Contraseña</strong><br>
-                                ************
-                            </div>
+                                <a href="<?=$http->getUrlBase().$config['action']?>" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar-<?=$campo?>">
+                                    Editar
+                                </a>
 
-                            <a href="<?=$http->getUrlBase()?>/Perfil/cambiarPassword" class="btn btn-outline-secondary btn-sm">
-                                Cambiar
-                            </a>
-                        </div>
+                                <!-- Modal específico para este campo -->
+                                <div class="modal fade" id="modalEditar-<?=$campo?>" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Editar <?=$config['label']?></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <form action="<?=$http->getUrlBase().$config['action']?>" method="POST">
+
+                                                <div class="modal-body">
+                                                    <?php if($campo === 'password'): ?>
+                                                        <!-- PASSWORD -->
+                                                        <div class="mb-3">
+                                                            <label>Contraseña actual</label>
+                                                            <input type="password" name="current_password" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label>Nueva contraseña</label>
+                                                            <input type="password" name="new_password" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label>Repetir nueva contraseña</label>
+                                                            <input type="password" name="repeat_password" class="form-control" required>
+                                                        </div>
+
+                                                    <?php elseif($campo === 'hospital'): ?>
+
+                                                        <!-- HOSPITAL -->
+                                                        <select name="hospitalID" class="form-control">
+                                                            <?php foreach ($data['hospitales'] as $hospital): ?>
+                                                                <option value="<?= $hospital['hospitalID'] ?>" <?= $hospital['nombre'] == $data['userData']['hospital'] ? 'selected' : ''?>>
+                                                                    <?= $hospital['nombre'] ?>
+                                                                </option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+
+                                                    <?php else: ?>
+
+                                                        <!-- RESTO -->
+                                                        <div class="mb-3">
+                                                            <label><?=$config['label']?></label>
+                                                            <input type="<?=$config['type']?>" 
+                                                                name="<?=$campo?>" 
+                                                                class="form-control" 
+                                                                value="<?=htmlspecialchars($data['userData'][$campo])?>" 
+                                                                required>
+                                                        </div>
+
+                                                    <?php endif; ?>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Volver</button>
+                                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                                </div>
+
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+
                         <div class="profile-field">
                             <div>
                                 <strong>Rol</strong><br>

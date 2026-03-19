@@ -18,7 +18,7 @@ class Principal extends Controller
         $data = [
             'extraCSS' => "<link rel='stylesheet' href='public/css/principal.css'>"
         ];
-        
+
         $viewUsuario = new Layout('Principal', $data);
     }
 }

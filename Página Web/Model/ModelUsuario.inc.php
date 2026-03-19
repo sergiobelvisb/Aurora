@@ -5,14 +5,12 @@ class ModelUsuario extends Model {
         parent::__construct();
     }
 
-    public function listadoUsuarios(){
-        return $this->query("SELECT * FROM usuarios_medicos");
-    }
-
     public function comprobarUsuario($email, $password){
         $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
+
         if($this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]) !== NULL){
             $password_hash = $this->query("SELECT password FROM usuarios_medicos WHERE email = ?", [$email])[0]['password'] ?? "";
+            
             if(password_verify($password, $password_hash)){
                 return true;
             } else {
@@ -25,25 +23,10 @@ class ModelUsuario extends Model {
         $res = $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
         return $res[0]['userID'] ?? null;
     }
-
+    
     public function getUsername($id){
         $res = $this->query("SELECT username FROM usuarios_medicos WHERE userID = ?", [$id]);
         return $res[0]['username'] ?? null;
-    }
-
-    public function setUsername($id, $antiguoNombre, $nombre){
-        $modelo = new ModelUsuario();
-        $res = $this->query("UPDATE user SET username = ? WHERE id = ?", [$nombre, $id]);
-        if($modelo->getImage($id) !== "default.jpg"){
-            rename("public/img/pfp/" . $antiguoNombre . ".jpg", "public/img/pfp/" . $nombre . ".jpg");
-            $modelo->setImagen($id, $nombre . ".jpg");
-        }
-
-        if($res){
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function getACL($id){
@@ -52,30 +35,63 @@ class ModelUsuario extends Model {
     }
 
     public function getImage($id){
-        $res = $this->query("SELECT fotodeperfil FROM user WHERE id = ?", [$id]);
+        $res = $this->query("SELECT fotodeperfil FROM usuarios_medicos WHERE userID = ?", [$id]);
         return '/public/img/pfp/' . $res[0]['fotodeperfil'];
     }
 
-    public function setImagen($id, $name){
-        $res = $this->query("UPDATE user SET fotodeperfil = ? WHERE id = ?", [$name, $id]);
-        if($res){
-            return true;
-        } else {
+    public function cambiarFoto($id, $foto){
+        $http = new HTTPComponent();
+        $nuevoNombre = $this->getUsername($id) . ".png";
+        $ruta = $_SERVER['DOCUMENT_ROOT'] . "/dashboard/TFG/public/img/pfp/" . $nuevoNombre;
+
+        if(move_uploaded_file($foto['tmp_name'], $ruta)){
+            $res = $this->query("UPDATE usuarios_medicos SET fotodeperfil = ? WHERE userID = ?", [$nuevoNombre, $id]);
+            $http->getResponse()->getSession()->set('foto', '/public/img/pfp/' . $nuevoNombre);
+            return $res ? true : false;
+        }
+        return false;
+    }
+
+    public function cambiarNombre($id, $nombre){
+        $http = new HTTPComponent();
+        $res = $this->query("UPDATE usuarios_medicos SET nombre = ? WHERE userID = ?", [$nombre, $id]);
+        $http->getResponse()->getSession()->set('nombreCompleto', $nombre);
+        return $res ? true : false;
+    }
+
+    public function cambiarEmail($id, $email){
+        $res = $this->query("UPDATE usuarios_medicos SET email = ? WHERE userID = ?", [$email, $id]);
+        return $res ? true : false;
+    }
+
+    public function cambiarHospital($id, $hospitalID){
+        $res = $this->query("UPDATE usuarios_medicos SET hospitalID = ? WHERE userID = ?", [$hospitalID, $id]);
+        return $res ? true : false;
+    }
+
+    public function cambiarPassword($id, $current, $new){
+        $user = $this->query("SELECT password FROM usuarios_medicos WHERE userID = ?", [$id])[0]['password'] ?? null;
+
+        if(!$user || !password_verify($current, $user)){
             return false;
         }
+
+        $newHash = password_hash($new, PASSWORD_DEFAULT);
+        $res = $this->query("UPDATE usuarios_medicos SET password = ? WHERE userID = ?", [$newHash, $id]);
+        return $res ? true : false;
     }
 
     public function getNombreCompleto($id){
-        $res = $this->query("SELECT nombre, apellido1, apellido2 FROM usuarios_medicos WHERE userID = ?", [$id])[0];
-        return $res['nombre'] . " " . $res['apellido1'] . " " . $res['apellido2']; 
+        $res = $this->query("SELECT nombre FROM usuarios_medicos WHERE userID = ?", [$id])[0];
+        return $res['nombre'] ?? null; 
     }
 
     public function getEmail($id){
-        return $this->query("SELECT email FROM usuarios_medicos WHERE userID = ?", [$id])[0]['email'];
+        return $this->query("SELECT email FROM usuarios_medicos WHERE userID = ?", [$id])[0]['email'] ?? null;
     }
 
     public function getHospital($id){
-        return $this->query("SELECT h.nombre AS hospital FROM usuarios_medicos u JOIN hospitales h ON u.hospitalID = h.hospitalID WHERE u.userID = ?", [$id])[0]['hospital'];
+        return $this->query("SELECT h.nombre AS hospital FROM usuarios_medicos u JOIN hospitales h ON u.hospitalID = h.hospitalID WHERE u.userID = ?", [$id])[0]['hospital'] ?? null;
     }
 
     public function getHospitales() {
@@ -86,24 +102,17 @@ class ModelUsuario extends Model {
         $res = $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
         return !empty($res);
     }
-
+    
     public function existeUsername($username){
         $res = $this->query("SELECT userID FROM usuarios_medicos WHERE username = ?", [$username]);
         return !empty($res);
     }
-
-    public function registrarUsuario($username, $nombre, $apellido1, $apellido2, $email, $password, $hospitalID){
-
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-        return $this->query(
-            "INSERT INTO usuarios_medicos 
-            (username, nombre, apellido1, apellido2, email, password, hospitalID)
-            VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [$username, $nombre, $apellido1, $apellido2, $email, $passwordHash, $hospitalID]
-        );
+    
+    public function registrarUsuario($username, $nombre, $email, $password, $hospitalID){
+        $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+        return $this->query( "INSERT INTO usuarios_medicos (username, nombre, email, password, hospitalID) VALUES (?, ?, ?, ?, ?)", [$username, $nombre, $email, $passwordHash, $hospitalID]);
     }
-
+    
     public function usuarioExiste($email){
         $res = $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
         return !empty($res);
