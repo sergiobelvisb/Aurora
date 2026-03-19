@@ -1,6 +1,6 @@
 # Aurora - Aplicación Web para Monitorización EEG
 
-Aurora es una aplicación web diseñada para médicos en clínicas u hospitales, desarrollada por Damiem Rave Grizales, Brian Camba Hipólito y Sergio Belvís Barba. El proyecto permite monitorizar ondas cerebrales de pacientes en tiempo real mediante el uso de bandas con sensores EEG conectadas a un Arduino y transmitiendo datos vía Bluetooth.  
+Aurora es una aplicación web diseñada para médicos en clínicas u hospitales, desarrollada por Damiem Rave Grizales, Brian Camba Hipólito y Sergio Belvís Barba. El proyecto permite monitorizar ondas cerebrales de pacientes en tiempo real mediante el uso de bandas con sensores electroencefalográficos conectadas a un Arduino y transmitiendo datos vía Bluetooth.  
 
 La aplicación ofrece a los médicos un panel de control desde el cual pueden:  
 - Crear perfiles de pacientes.  
