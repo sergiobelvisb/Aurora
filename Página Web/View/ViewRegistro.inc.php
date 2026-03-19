@@ -15,11 +15,7 @@
 
             <div class="form-row two-columns">
                 <input type="text" name="nombre" placeholder="Nombre">
-                <input type="text" name="apellido1" placeholder="Primer apellido">
-            </div>
-
-            <div class="form-row">
-                <input type="text" name="apellido2" placeholder="Segundo apellido">
+                <input type="text" name="apellidos" placeholder="Apellidos">
             </div>
 
             <div class="form-row">

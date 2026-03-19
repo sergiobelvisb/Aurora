@@ -72,11 +72,13 @@ class Login extends Controller
 
             $id = $modelo->getID($email);
             $acl = $modelo->getACL($id);
+            $foto = $modelo->getImage($id);
             $nombreCompleto = $modelo->getNombreCompleto($id);
 
             $this->http->getResponse()->getSession()->set("id", $id);
             $this->http->getResponse()->getSession()->set("email", $email);
             $this->http->getResponse()->getSession()->set("nombreCompleto", $nombreCompleto);
+            $this->http->getResponse()->getSession()->set("foto", $foto);
             $this->http->getResponse()->getSession()->set("acl", $acl);
 
             $this->http->getResponse()->redirect($this->http->getUrlBase() . "/Principal");
