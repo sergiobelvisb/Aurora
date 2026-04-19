@@ -117,6 +117,14 @@ class ModelUsuario extends Model {
         $res = $this->query("SELECT userID FROM usuarios_medicos WHERE email = ?", [$email]);
         return !empty($res);
     }
+
+    public function getPacientesByMedico($medicoID) {
+        return $this->query("SELECT pacienteID, nombre, edad, DNI, telefono, fecha_de_nacimiento FROM pacientes WHERE medicoID = ?", [$medicoID]);
+    }
+
+    /*public function registrarPaciente($nombre, $edad, $dni, $tel, $fecha, $medicoID){
+        return $this->
+    }*/
 }
 
 ?>
