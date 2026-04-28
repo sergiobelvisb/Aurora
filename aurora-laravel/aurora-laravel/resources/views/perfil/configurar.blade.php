@@ -1,15 +1,3 @@
-{{--
-    MIGRACIÓN: ViewConfPerfil.inc.php → perfil/configurar.blade.php
-
-    Cambios clave:
-    - $http->getUrlBase().'/Perfil/ActualizarPerfil' → route('perfil.actualizar')
-    - $this->data['fotodeperfil'] → $fotodeperfil
-    - $this->data['usuario'] → $usuario
-    - $this->data['admin'] → $admin
-    - $this->data['acl'] → $acl
-    - Bug original corregido: faltaba cerrar el input de acl → ahora en Blade no aplica
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Configuración de Perfil')
@@ -42,8 +30,7 @@
                 <input type="password" id="password" name="password" placeholder="Dejar vacío para no cambiar">
 
                 {{--
-                    Tu: if($this->data['admin']) { echo "<input...></input>"; }
-                    Bug original: faltaba > al cerrar el input
+                    if($this->data['admin']) { echo "<input...></input>"; }
                 --}}
                 @if($admin)
                     <label for="acl">Rol ACL:</label>
@@ -58,13 +45,13 @@
 
         <div>
             @if(!$admin)
-                {{-- Tu: echo "<a href='Aviso'>..." --}}
+                {{-- echo "<a href='Aviso'>..." --}}
                 <a href="{{ url('/aviso') }}">
                     <button type="button" class="actions">Eliminar cuenta</button>
                 </a>
             @endif
 
-            {{-- Tu: href="../Perfil" — relativo reemplazado por ruta nombrada --}}
+            {{-- href="../Perfil" — relativo reemplazado por ruta nombrada --}}
             <a href="{{ route('perfil.show') }}">
                 <button type="button" class="actions">Volver</button>
             </a>
