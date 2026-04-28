@@ -1,13 +1,3 @@
-{{--
-    MIGRACIÓN: ViewPanelControl.inc.php → panel/index.blade.php
-
-    Cambios clave:
-    - $data['pacientes'] → $pacientes (variable directa)
-    - $http->getUrlBase().'/PanelControl/registrarPaciente' → route('panel.registrar-paciente')
-    - foreach ($data['pacientes'] as $p) → @foreach ($pacientes as $p)
-    - Se añade @csrf en el form POST del modal
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Panel de Control')
@@ -67,11 +57,6 @@
     </div>
 
 </div>
-
-{{-- =====================================================
-     MODAL: Registrar Paciente
-     Tu: form action="...PanelControl/registrarPaciente"
-====================================================== --}}
 <div class="modal fade" id="registrarPaciente" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content register-card">
