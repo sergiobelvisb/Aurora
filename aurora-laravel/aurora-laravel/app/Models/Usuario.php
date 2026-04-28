@@ -20,7 +20,7 @@ class Usuario extends Authenticatable
     // Relaciones
     // ──────────────────────────────────────────────
 
-    // Tu: getHospital($id) con JOIN manual
+    // getHospital($id) con JOIN manual
     public function hospital()
     {
         return $this->belongsTo(Hospital::class, 'hospitalID');
