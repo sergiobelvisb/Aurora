@@ -1,11 +1,3 @@
-{{--
-    MIGRACIÓN: ViewTecnologia.inc.php → public-pages/tecnologia.blade.php
-
-    Cambios clave:
-    - $http->getUrlBase().'/public/img/Logo.png' → asset('img/Logo.png')
-    - Sin variables PHP dinámicas, migración directa
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Tecnología')
@@ -41,7 +33,7 @@
 
         <div class="row g-4 mt-5 align-items-center">
             <div class="col-md-6 text-center">
-                {{-- Tu: src="<?=$http->getUrlBase()?>/public/img/Logo.png" --}}
+                {{-- src="<?=$http->getUrlBase()?>/public/img/Logo.png" --}}
                 <img src="{{ asset('img/Logo.png') }}" alt="Aurora EEG" class="img-fluid" style="max-height: 400px;">
             </div>
             <div class="col-md-6">
