@@ -1,12 +1,3 @@
-{{--
-    MIGRACIÓN: ViewVistasAdministrador.inc.php → admin/dashboard.blade.php
-
-    Cambios clave:
-    - $this->data['usuario'] → session('username')
-    - href "AdminUsuarios" relativo → route('admin.usuarios.index')
-    - href "LogOut" → route('logout')
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Panel Administrador')
