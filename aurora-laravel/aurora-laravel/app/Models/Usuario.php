@@ -30,14 +30,14 @@ class Usuario extends Authenticatable
     public function pacientes()
     {
         return $this->hasMany(Paciente::class, 'medicoID');
-        // Tu: getPacientesByMedico($medicoID)
+        //  getPacientesByMedico($medicoID)
     }
 
     // ──────────────────────────────────────────────
     // Métodos de negocio (los que no cubre Eloquent)
     // ──────────────────────────────────────────────
 
-    // Tu: comprobarUsuario($email, $password)
+    //  comprobarUsuario($email, $password)
     public static function verificarCredenciales(string $email, string $password): bool
     {
         $usuario = static::where('email', $email)->first();
@@ -45,14 +45,14 @@ class Usuario extends Authenticatable
         return Hash::check($password, $usuario->password);
     }
 
-    // Tu: cambiarFoto($id, $foto) — la lógica de ficheros va al Controller o un Service
+    // cambiarFoto($id, $foto) — la lógica de ficheros va al Controller o un Service
     public function actualizarFotoPerfil(string $nombreArchivo): bool
     {
         $this->fotodeperfil = $nombreArchivo;
         return $this->save();
     }
 
-    // Tu: cambiarPassword($id, $current, $new)
+    // cambiarPassword($id, $current, $new)
     public function cambiarPassword(string $actual, string $nueva): bool
     {
         if (!Hash::check($actual, $this->password)) return false;
@@ -60,7 +60,7 @@ class Usuario extends Authenticatable
         return $this->save();
     }
 
-    // Tu: existeEmail / existeUsername
+    // existeEmail / existeUsername
     public static function existeEmail(string $email): bool
     {
         return static::where('email', $email)->exists();
