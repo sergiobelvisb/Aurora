@@ -7,7 +7,7 @@
 {{-- HERO --}}
 <section class="hero text-center">
     <div class="container">
-        {{-- Tu: src="public/img/NombreyLogo.png" --}}
+        {{-- src="public/img/NombreyLogo.png" --}}
         <img src="{{ asset('img/NombreyLogo.png') }}" alt="Aurora EEG" class="hero-logo">
         <h1>Monitorización cerebral avanzada</h1>
         <p class="hero-slogan mt-2">Detectando el futuro de la salud neurológica</p>
