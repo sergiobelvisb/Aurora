@@ -1,14 +1,3 @@
-{{--
-    MIGRACIÓN: ViewUsuario.inc.php → admin/usuarios/show.blade.php
-
-    Cambios clave:
-    - $this->data['nombre'] → $usuario->username (objeto Eloquent)
-    - $this->data['acl'] → $usuario->acl
-    - form action POST → route('admin.usuarios.actualizar', $usuario->userID)
-    - href "../../AdminUsuarios" relativo → route('admin.usuarios.index')
-    - @method('PATCH') para actualizaciones REST
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Editar Usuario')
@@ -51,7 +40,7 @@
     </form>
 
     <div>
-        {{-- Tu: href="../../AdminUsuarios" --}}
+        {{-- href="../../AdminUsuarios" --}}
         <a href="{{ route('admin.usuarios.index') }}">
             <button type="button" class="actions">Volver</button>
         </a>
