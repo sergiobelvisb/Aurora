@@ -14,7 +14,7 @@
 
             {{-- FOTO --}}
             <div class="perfil-imagen">
-                {{-- Tu: src="<?=$this->data['fotodeperfil']?>" --}}
+                {{-- src="<?=$this->data['fotodeperfil']?>" --}}
                 <img src="{{ asset($fotodeperfil) }}" alt="Foto de perfil">
                 <br><br>
                 <input type="file" name="foto_perfil" id="input-imagen" accept=".jpg">
@@ -23,7 +23,7 @@
             {{-- DATOS --}}
             <div class="perfil-datos">
                 <label for="username">Nombre de usuario:</label>
-                {{-- Tu: value= <?=$this->data['usuario'] ?> (faltaban comillas) --}}
+                {{-- value= <?=$this->data['usuario'] ?> (faltaban comillas) --}}
                 <input type="text" id="username" name="username" value="{{ $usuario }}" required>
 
                 <label for="password">Nueva contraseña:</label>
