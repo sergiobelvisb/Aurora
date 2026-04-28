@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody>
-            {{-- Tu: foreach ($this->data['usuarios'] as $reg) --}}
+            {{-- foreach ($this->data['usuarios'] as $reg) --}}
             @forelse ($usuarios as $usuario)
                 <tr>
                     <td>{{ $usuario['userID'] ?? $usuario->userID }}</td>
