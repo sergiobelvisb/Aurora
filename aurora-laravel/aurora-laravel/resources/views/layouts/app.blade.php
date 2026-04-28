@@ -8,17 +8,12 @@
 
     {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    {{-- Tu CSS propio --}}
+    {{-- CSS propio --}}
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
     @stack('styles')
 </head>
 <body>
-
-    {{-- =====================================================
-         NAVBAR — equivale a tu View/Layout/header.inc.php
-         La variable $http->getUrlBase() se reemplaza por url() o route()
-    ====================================================== --}}
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
@@ -41,10 +36,10 @@
                         <a class="nav-link" href="{{ url('/profesionales') }}">Profesionales</a>
                     </li>
 
-                    {{-- Bloque condicional: si hay sesión activa muestra perfil, si no login --}}
+                    {{-- si hay sesión activa muestra perfil, si no login --}}
                     @if(session('userID'))
                         <li class="nav-item">
-                            {{-- Tu: session->get('nombreCompleto') --}}
+                            {{-- session->get('nombreCompleto') --}}
                             <a class="nav-link" href="{{ url('/perfil') }}">
                                 <img src="{{ asset(session('foto', 'img/pfp/default.png')) }}"
                                      class="rounded-circle"
@@ -74,18 +69,10 @@
             </div>
         </div>
     </nav>
-
-    {{-- =====================================================
-         CONTENIDO PRINCIPAL — cada vista inyecta aquí
-         Equivale a: $viewListarUsuarios = new View($view, $data)
-    ====================================================== --}}
     <main>
         @yield('content')
     </main>
 
-    {{-- =====================================================
-         FOOTER — equivale a tu View/Layout/footer.inc.php
-    ====================================================== --}}
     <footer class="footer mt-auto py-4">
         <div class="container text-center">
             <p class="mb-0">&copy; {{ date('Y') }} Aurora EEG. Todos los derechos reservados.</p>
