@@ -1,11 +1,3 @@
-{{--
-    MIGRACIÓN: ViewProfesionales.inc.php → public-pages/profesionales.blade.php
-
-    Cambios clave:
-    - $http->getUrlBase().'/public/img/panel-control.png' → asset('img/panel-control.png')
-    - Sin variables PHP dinámicas, migración directa
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Para Profesionales')
