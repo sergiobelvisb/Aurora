@@ -1,13 +1,3 @@
-{{--
-    MIGRACIÓN: ViewRegistro.inc.php → auth/registro.blade.php
-
-    Cambios clave:
-    - $http->getUrlBase().'/Registro/registrarUsuario' → route('registro.post')
-    - $data['error'] → $errors->first()
-    - $data['hospitales'] → $hospitales (variable directa desde el controlador)
-    - Se añade @csrf
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Crear cuenta')
@@ -17,7 +7,7 @@
     <div class="register-card">
         <h2 class="register-title">Crear cuenta</h2>
 
-        {{-- Tu: if (!empty($data['error'])) --}}
+        {{-- if (!empty($data['error'])) --}}
         @if ($errors->any())
             <div class="error-message">
                 {{ $errors->first() }}
@@ -25,7 +15,7 @@
         @endif
 
         {{--
-            Tu: action="<?=$http->getUrlBase()?>/Registro/registrarUsuario"
+            action="<?=$http->getUrlBase()?>/Registro/registrarUsuario"
         --}}
         <form action="{{ route('registro.post') }}" method="POST" class="register-form">
             @csrf
@@ -67,7 +57,7 @@
             </div>
 
             <div class="form-row">
-                {{-- Tu: foreach ($data['hospitales'] as $hospital) --}}
+                {{-- foreach ($data['hospitales'] as $hospital) --}}
                 <select name="hospital" id="hospital-select">
                     <option value="">Selecciona un hospital</option>
                     @foreach ($hospitales as $hospital)
@@ -88,7 +78,7 @@
         </form>
 
         <div class="mt-4 text-center">
-            {{-- Tu: href="<?=$http->getUrlBase()?>/Login" --}}
+            {{-- href="<?=$http->getUrlBase()?>/Login" --}}
             <p>¿Ya tienes una cuenta? <a href="{{ route('login.form') }}">Inicia Sesión aquí</a></p>
         </div>
     </div>
