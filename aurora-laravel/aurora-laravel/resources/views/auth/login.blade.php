@@ -1,13 +1,3 @@
-{{--
-    MIGRACIÓN: ViewLogin.inc.php → auth/login.blade.php
-    
-    Cambios clave:
-    - $http->getUrlBase().'/Login/comprobarSesion' → route('login.post')
-    - $data['error'] → $errors->first('email') via withErrors() del controlador
-    - $data['formData']['email'] → old('email') helper de Laravel
-    - Se añade @csrf obligatorio en todos los forms POST
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Iniciar sesión')
@@ -17,7 +7,7 @@
     <div class="login-card p-5 shadow-sm rounded">
         <h2 class="text-center mb-4">Iniciar sesión</h2>
 
-        {{-- Tu: if (!empty($data['error'])) — ahora usa el bag de errores de Laravel --}}
+        {{-- if (!empty($data['error'])) — ahora usa el bag de errores de Laravel --}}
         @if ($errors->any())
             <div class="alert alert-danger text-center">
                 {{ $errors->first() }}
@@ -25,8 +15,8 @@
         @endif
 
         {{--
-            Tu: action="<?=$http->getUrlBase()?>/Login/comprobarSesion"
-            Ahora: action="{{ route('login.post') }}"
+             antes: action="<?=$http->getUrlBase()?>/Login/comprobarSesion"
+            ahora: action="{{ route('login.post') }}"
             @csrf reemplaza cualquier token manual que tuvieras
         --}}
         <form action="{{ route('login.post') }}" method="POST">
@@ -64,7 +54,7 @@
         </form>
 
         <div class="mt-4 text-center">
-            {{-- Tu: href="<?=$http->getUrlBase()?>/Registro" --}}
+            {{-- href="<?=$http->getUrlBase()?>/Registro" --}}
             <p>¿No tienes cuenta? <a href="{{ url('/registro') }}">Regístrate aquí</a></p>
         </div>
     </div>
