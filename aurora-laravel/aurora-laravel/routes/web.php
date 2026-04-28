@@ -10,7 +10,6 @@ use App\Http\Controllers\AdminUsuariosController;
 
 // ══════════════════════════════════════════════════════════════
 // RUTAS PÚBLICAS — sin autenticación
-// Tu .htaccess: ^([controller])$ → index.php?controller=$1
 // ══════════════════════════════════════════════════════════════
 
 // ViewPrincipal → Principal/index
@@ -23,33 +22,33 @@ Route::get('/tecnologia', [PrincipalController::class, 'tecnologia'])->name('tec
 Route::get('/profesionales', [PrincipalController::class, 'profesionales'])->name('profesionales');
 
 // ── LOGIN ──────────────────────────────────────────────────────
-// Tu: Controller=Login, action=index / action=comprobarSesion
+// Controller=Login, action=index / action=comprobarSesion
 Route::get('/login',  [LoginController::class, 'index'])->name('login.form');
 Route::post('/login', [LoginController::class, 'autenticar'])->name('login.post');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // ── REGISTRO ───────────────────────────────────────────────────
-// Tu: Controller=Registro, action=index / action=registrarUsuario
+// Controller=Registro, action=index / action=registrarUsuario
 Route::get('/registro',  [RegistroController::class, 'index'])->name('registro.form');
 Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
 
 
 // ══════════════════════════════════════════════════════════════
 // RUTAS PROTEGIDAS — requieren sesión activa
-// Tu middleware manual: if(!session('userID')) redirect al login
+// middleware manual: if(!session('userID')) redirect al login
 // ══════════════════════════════════════════════════════════════
 
 Route::middleware('auth.aurora')->group(function () {
 
     // ── PANEL DE CONTROL ───────────────────────────────────────
-    // Tu: Controller=PanelControl, action=index / action=registrarPaciente
+    // Controller=PanelControl, action=index / action=registrarPaciente
     Route::get('/panel-control',              [PanelControlController::class, 'index'])
          ->name('panel.index');
     Route::post('/panel-control/paciente',    [PanelControlController::class, 'registrarPaciente'])
          ->name('panel.registrar-paciente');
 
     // ── PERFIL ─────────────────────────────────────────────────
-    // Tu: Controller=Perfil, action=index / cambiarFoto / ActualizarPerfil
+    // Controller=Perfil, action=index / cambiarFoto / ActualizarPerfil
     Route::get('/perfil',                     [PerfilController::class, 'show'])
          ->name('perfil.show');
     Route::post('/perfil/foto',               [PerfilController::class, 'cambiarFoto'])
@@ -70,12 +69,12 @@ Route::middleware('auth.aurora')->group(function () {
          ->name('perfil.hospital');
 
     // ── ADMIN — solo rol administrador ─────────────────────────
-    // Tu: Controller=VistasAdministrador / AdminUsuarios
+    // Controller=VistasAdministrador / AdminUsuarios
     Route::middleware('acl.admin')->group(function () {
         Route::get('/vistas-administrador',           [AdminUsuariosController::class, 'dashboard'])
              ->name('admin.dashboard');
 
-        // Tu: AdminUsuarios/index + AdminUsuarios/Usuario/{id}
+        // AdminUsuarios/index + AdminUsuarios/Usuario/{id}
         Route::get('/admin/usuarios',                 [AdminUsuariosController::class, 'index'])
              ->name('admin.usuarios.index');
         Route::get('/admin/usuarios/{id}',            [AdminUsuariosController::class, 'show'])
