@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody id="tablaPacientes">
-                {{-- Tu: foreach ($data['pacientes'] as $p) --}}
+                {{-- foreach ($data['pacientes'] as $p) --}}
                 @forelse ($pacientes as $p)
                 <tr>
                     <td>{{ $p['nombre'] }}</td>
