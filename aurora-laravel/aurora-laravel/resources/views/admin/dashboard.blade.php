@@ -15,12 +15,12 @@
 <h1>Listado de vistas</h1>
 
 <main>
-    {{-- Tu: $this->data['usuario'] — viene directamente de sesión --}}
+    {{-- $this->data['usuario'] — viene directamente de sesión --}}
     <h2><strong>¡Hola {{ session('username') }}! ¿A dónde te quieres redirigir?</strong></h2>
 
     <ol>
         <li>
-            {{-- Tu: href="AdminUsuarios" --}}
+            {{-- href="AdminUsuarios" --}}
             <a href="{{ route('admin.usuarios.index') }}">
                 Administrar Usuarios
             </a>
@@ -38,7 +38,7 @@
     </ol>
     <br>
 
-    {{-- Tu: href="LogOut" --}}
+    {{-- href="LogOut" --}}
     <a href="{{ route('logout') }}">
         <button class="actions">Cerrar Sesión</button>
     </a>
