@@ -1,12 +1,3 @@
-{{--
-    MIGRACIÓN: ViewAdminUsuarios.inc.php (la del ejemplo anterior) → admin/usuarios/index.blade.php
-
-    Cambios clave:
-    - $this->data['usuarios'] → $usuarios (Eloquent Collection o array)
-    - $http->getUrlBase()."/AdminUsuarios/Usuario/{id}" → route('admin.usuarios.show', $usuario->userID)
-    - foreach → @foreach
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Administrar Usuarios')
@@ -34,7 +25,7 @@
                 <tr>
                     <td>{{ $usuario['userID'] ?? $usuario->userID }}</td>
                     <td>
-                        {{-- Tu: href='$http->getUrlBase()."/AdminUsuarios/Usuario/{id}"' --}}
+                        {{-- href='$http->getUrlBase()."/AdminUsuarios/Usuario/{id}"' --}}
                         <a href="{{ route('admin.usuarios.show', $usuario['userID'] ?? $usuario->userID) }}">
                             {{ $usuario['username'] ?? $usuario->username }}
                         </a>
@@ -56,7 +47,7 @@
     </table>
 
     <div class="mt-3">
-        {{-- Tu: href="<?= $http->getUrlBase();?>/VistasAdministrador" --}}
+        {{-- href="<?= $http->getUrlBase();?>/VistasAdministrador" --}}
         <a href="{{ url('/vistas-administrador') }}">
             <button class="actions">Volver</button>
         </a>
