@@ -27,7 +27,7 @@ class LoginController extends Controller
             return back()->withErrors(['email' => 'Credenciales incorrectas']);
         }
 
-        // Equivale a tus: session->set('userID'), session->set('username'), etc.
+        // Equivale a: session->set('userID'), session->set('username'), etc.
         session([
             'userID'        => $usuario->userID,
             'username'      => $usuario->username,
@@ -41,7 +41,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        session()->flush();   // Equivale a tu session->destroy()
+        session()->flush();   // Equivale a session->destroy()
         return redirect()->route('login.form');
     }
 }
