@@ -29,7 +29,7 @@
                        id="email"
                        name="email"
                        placeholder="usuario@ejemplo.com"
-                       {{-- Tu: value="<?=$data['formData']['email'] ?? ''?>" --}}
+                       {{-- value="<?=$data['formData']['email'] ?? ''?>" --}}
                        value="{{ old('email') }}">
             </div>
 
