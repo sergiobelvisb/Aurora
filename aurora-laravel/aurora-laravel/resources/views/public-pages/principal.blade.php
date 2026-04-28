@@ -1,11 +1,3 @@
-{{--
-    MIGRACIÓN: ViewPrincipal.inc.php → public-pages/principal.blade.php
-
-    Cambios clave:
-    - public/img/... → asset('img/...')
-    - No había variables dinámicas PHP en esta vista, migración es directa
---}}
-
 @extends('layouts.app')
 
 @section('title', 'Inicio')
