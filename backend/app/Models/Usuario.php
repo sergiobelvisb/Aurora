@@ -70,4 +70,5 @@ class Usuario extends Authenticatable
     {
         return static::where('username', $username)->exists();
     }
+    
 }
