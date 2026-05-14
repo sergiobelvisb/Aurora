@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +9,11 @@
 
     {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    {{-- CSS propio --}}
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
     @stack('styles')
 </head>
-<body>
+
+<body class="d-flex flex-column min-vh-100">
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
@@ -35,22 +35,23 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/profesionales') }}">Profesionales</a>
                     </li>
-
+                    @if(session('acl') === 'Administrador' || session('acl') === 'Medico')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/panel-control') }}">Panel de control</a>
+                        </li>
+                    @endif
                     {{-- si hay sesión activa muestra perfil, si no login --}}
                     @if(session('userID'))
                         <li class="nav-item">
                             {{-- session->get('nombreCompleto') --}}
                             <a class="nav-link" href="{{ url('/perfil') }}">
-                                <img src="{{ asset(session('foto', 'img/pfp/default.png')) }}"
-                                     class="rounded-circle"
-                                     width="32" height="32"
-                                     alt="Foto de perfil">
+                                <img src="{{ asset(session('foto', 'img/pfp/default.png')) }}" class="rounded-circle"
+                                    width="32" height="32" alt="Foto de perfil">
                                 {{ session('username') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-outline-danger btn-sm ms-2 px-3"
-                               href="{{ url('/logout') }}">
+                            <a class="nav-link btn btn-outline-danger btn-sm ms-2 px-3" href="{{ url('/logout') }}">
                                 Cerrar sesión
                             </a>
                         </li>
@@ -59,8 +60,7 @@
                             <a class="nav-link" href="{{ route('login.form') }}">Iniciar sesión</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-primary btn-sm ms-2 px-3 text-white"
-                               href="{{ url('/registro') }}">
+                            <a class="nav-link btn btn-primary btn-sm ms-2 px-3 text-white" href="{{ url('/registro') }}">
                                 Registrarse
                             </a>
                         </li>
@@ -69,7 +69,7 @@
             </div>
         </div>
     </nav>
-    <main>
+    <main class="flex-grow-1"> 
         @yield('content')
     </main>
 
@@ -83,4 +83,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>
+
 </html>

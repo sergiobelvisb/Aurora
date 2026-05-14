@@ -5,6 +5,7 @@ use App\Http\Controllers\PrincipalController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\PanelControlController;
+use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\AdminUsuariosController;
 
@@ -12,74 +13,69 @@ use App\Http\Controllers\AdminUsuariosController;
 // RUTAS PÚBLICAS — sin autenticación
 // ══════════════════════════════════════════════════════════════
 
-// ViewPrincipal → Principal/index
 Route::get('/', [PrincipalController::class, 'index'])->name('home');
-
-// ViewTecnologia → Tecnologia/index
 Route::get('/tecnologia', [PrincipalController::class, 'tecnologia'])->name('tecnologia');
-
-// ViewProfesionales → Profesionales/index
 Route::get('/profesionales', [PrincipalController::class, 'profesionales'])->name('profesionales');
 
 // ── LOGIN ──────────────────────────────────────────────────────
-// Controller=Login, action=index / action=comprobarSesion
 Route::get('/login',  [LoginController::class, 'index'])->name('login.form');
 Route::post('/login', [LoginController::class, 'autenticar'])->name('login.post');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // ── REGISTRO ───────────────────────────────────────────────────
-// Controller=Registro, action=index / action=registrarUsuario
 Route::get('/registro',  [RegistroController::class, 'index'])->name('registro.form');
 Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
 
 
 // ══════════════════════════════════════════════════════════════
-// RUTAS PROTEGIDAS — requieren sesión activa
-// middleware manual: if(!session('userID')) redirect al login
+// RUTAS PROTEGIDAS — requieren sesión activa (middleware AuthAurora)
 // ══════════════════════════════════════════════════════════════
 
 Route::middleware('auth.aurora')->group(function () {
 
-    // ── PANEL DE CONTROL ───────────────────────────────────────
-    // Controller=PanelControl, action=index / action=registrarPaciente
-    Route::get('/panel-control',              [PanelControlController::class, 'index'])
-         ->name('panel.index');
-    Route::post('/panel-control/paciente',    [PanelControlController::class, 'registrarPaciente'])
-         ->name('panel.registrar-paciente');
+    // ── PANEL CONTROL (existente) ──────────────────────────────
+    Route::get('/panel-control', [PanelController::class, 'index'])
+         ->name('panel-control.index');
+    Route::post('/panel-control/paciente', [PanelController::class, 'registrarPaciente'])
+         ->name('panel-control.registrar-paciente');
+
+    // ── PANEL EEG (nuevo) ──────────────────────────────────────
+    Route::prefix('panel')->name('panel.')->group(function () {
+
+        // Vistas
+        Route::get('/',        [PanelController::class, 'index'])  ->name('index');
+        Route::get('/resumen', [PanelController::class, 'resumen'])->name('resumen');
+
+        // Acciones JSON (POST)
+        Route::post('/guardarSesion',    [PanelController::class, 'guardarSesion'])   ->name('guardarSesion');
+        Route::post('/eliminarSesion',   [PanelController::class, 'eliminarSesion'])  ->name('eliminarSesion');
+        Route::post('/crearPaciente',    [PanelController::class, 'crearPaciente'])   ->name('crearPaciente');
+        Route::post('/editarPaciente',   [PanelController::class, 'editarPaciente'])  ->name('editarPaciente');
+        Route::post('/eliminarPaciente', [PanelController::class, 'eliminarPaciente'])->name('eliminarPaciente');
+
+    });
 
     // ── PERFIL ─────────────────────────────────────────────────
-    // Controller=Perfil, action=index / cambiarFoto / ActualizarPerfil
-    Route::get('/perfil',                     [PerfilController::class, 'show'])
-         ->name('perfil.show');
-    Route::post('/perfil/foto',               [PerfilController::class, 'cambiarFoto'])
-         ->name('perfil.cambiar-foto');
-    Route::get('/perfil/configurar',          [PerfilController::class, 'configurar'])
-         ->name('perfil.configurar');
-    Route::patch('/perfil',                   [PerfilController::class, 'actualizar'])
-         ->name('perfil.actualizar');
+    Route::get('/perfil',            [PerfilController::class, 'show'])       ->name('perfil.show');
+    Route::post('/perfil/foto',      [PerfilController::class, 'cambiarFoto'])->name('perfil.cambiar-foto');
+    Route::get('/perfil/configurar', [PerfilController::class, 'configurar']) ->name('perfil.configurar');
+    Route::patch('/perfil',          [PerfilController::class, 'actualizar']) ->name('perfil.actualizar');
 
-    // Campos individuales del perfil (los modales)
-    Route::patch('/perfil/nombre',            [PerfilController::class, 'actualizarNombre'])
-         ->name('perfil.nombre');
-    Route::patch('/perfil/email',             [PerfilController::class, 'actualizarEmail'])
-         ->name('perfil.email');
-    Route::patch('/perfil/password',          [PerfilController::class, 'actualizarPassword'])
-         ->name('perfil.password');
-    Route::patch('/perfil/hospital',          [PerfilController::class, 'actualizarHospital'])
-         ->name('perfil.hospital');
+    // Campos individuales del perfil (modales)
+    Route::patch('/perfil/nombre',   [PerfilController::class, 'actualizarNombre'])  ->name('perfil.nombre');
+    Route::patch('/perfil/email',    [PerfilController::class, 'actualizarEmail'])   ->name('perfil.email');
+    Route::patch('/perfil/password', [PerfilController::class, 'actualizarPassword'])->name('perfil.password');
+    Route::patch('/perfil/hospital', [PerfilController::class, 'actualizarHospital'])->name('perfil.hospital');
 
     // ── ADMIN — solo rol administrador ─────────────────────────
-    // Controller=VistasAdministrador / AdminUsuarios
     Route::middleware('acl.admin')->group(function () {
-        Route::get('/vistas-administrador',           [AdminUsuariosController::class, 'dashboard'])
+        Route::get('/vistas-administrador',  [AdminUsuariosController::class, 'dashboard'])
              ->name('admin.dashboard');
-
-        // AdminUsuarios/index + AdminUsuarios/Usuario/{id}
-        Route::get('/admin/usuarios',                 [AdminUsuariosController::class, 'index'])
+        Route::get('/admin/usuarios',        [AdminUsuariosController::class, 'index'])
              ->name('admin.usuarios.index');
-        Route::get('/admin/usuarios/{id}',            [AdminUsuariosController::class, 'show'])
+        Route::get('/admin/usuarios/{id}',   [AdminUsuariosController::class, 'show'])
              ->name('admin.usuarios.show');
-        Route::patch('/admin/usuarios/{id}',          [AdminUsuariosController::class, 'actualizar'])
+        Route::patch('/admin/usuarios/{id}', [AdminUsuariosController::class, 'actualizar'])
              ->name('admin.usuarios.actualizar');
     });
 

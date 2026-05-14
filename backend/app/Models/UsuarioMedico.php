@@ -9,8 +9,12 @@ class UsuarioMedico extends Authenticatable
 {
     use HasFactory;
 
-    protected $table      = 'usuarios_medicos';
+    protected $table = 'usuarios_medicos';
     protected $primaryKey = 'userID';
+
+    public $incrementing = true;   // userID es AUTO_INCREMENT
+    protected $keyType = 'int';
+    public $timestamps = false; // La tabla no tiene created_at / updated_at
 
     protected $fillable = [
         'username',

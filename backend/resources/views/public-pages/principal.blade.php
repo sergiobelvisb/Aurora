@@ -83,11 +83,33 @@
                     <li>✔ Gestión de pacientes</li>
                 </ul>
             </div>
-            <div class="col-md-6 text-center">
-                <div class="card p-4">
-                    <h5>Panel de Control Médico</h5>
-                    <p>Visualización clara de métricas cerebrales en tiempo real.</p>
-                    <button class="btn btn-primary">Ver Demo</button>
+           {{-- TESTIMONIOS --}}
+            <div class="col-md-6">
+                <div class="card p-4 mb-3 shadow-sm border-0">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="fs-2">🧠</div>
+                        <div>
+                            <p class="mb-1 fst-italic text-muted">
+                                "Aurora ha reducido nuestro tiempo de diagnóstico en un 40%.
+                                La visualización de patrones EEG es clara e inmediata."
+                            </p>
+                            <strong style="color:#355a6d;">Dra. Carmen Ruiz</strong>
+                            <small class="text-muted d-block">Neuróloga – Hospital Clínic de Barcelona</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-4 shadow-sm border-0">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="fs-2">🩺</div>
+                        <div>
+                            <p class="mb-1 fst-italic text-muted">
+                                "La integración con nuestros protocolos fue sencilla.
+                                Ahora detectamos epilepsia focal en fases muy tempranas."
+                            </p>
+                            <strong style="color:#355a6d;">Dr. Marcos Ibáñez</strong>
+                            <small class="text-muted d-block">Jefe de Neurología – Clínica Universidad de Navarra</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
