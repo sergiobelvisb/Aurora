@@ -37,13 +37,16 @@
                     </li>
                     @if(session('acl') === 'Administrador' || session('acl') === 'Medico')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/panel-control') }}">Panel de control</a>
+                            <a class="nav-link" href="{{ route('panel.index') }}">Panel de control</a>
                         </li>
                     @endif
-                    {{-- si hay sesión activa muestra perfil, si no login --}}
+                    @if(session('acl') === 'Administrador')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">Administración</a>
+                        </li>
+                    @endif
                     @if(session('userID'))
                         <li class="nav-item">
-                            {{-- session->get('nombreCompleto') --}}
                             <a class="nav-link" href="{{ url('/perfil') }}">
                                 <img src="{{ asset(session('foto', 'img/pfp/default.png')) }}" class="rounded-circle"
                                     width="32" height="32" alt="Foto de perfil">
@@ -51,18 +54,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-outline-danger btn-sm ms-2 px-3" href="{{ url('/logout') }}">
+                            <a class="nav-link btn btn-sm ms-2 px-3" href="{{ url('/logout') }}">
                                 Cerrar sesión
                             </a>
                         </li>
                     @else
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login.form') }}">Iniciar sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-primary btn-sm ms-2 px-3 text-white" href="{{ url('/registro') }}">
-                                Registrarse
-                            </a>
                         </li>
                     @endif
                 </ul>
@@ -79,7 +77,6 @@
         </div>
     </footer>
 
-    {{-- Bootstrap JS --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 </body>

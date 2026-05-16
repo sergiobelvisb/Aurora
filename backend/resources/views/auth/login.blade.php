@@ -7,18 +7,12 @@
     <div class="login-card p-5 shadow-sm rounded">
         <h2 class="text-center mb-4">Iniciar sesión</h2>
 
-        {{-- if (!empty($data['error'])) — ahora usa el bag de errores de Laravel --}}
         @if ($errors->any())
             <div class="alert alert-danger text-center">
                 {{ $errors->first() }}
             </div>
         @endif
 
-        {{--
-             antes: action="<?=$http->getUrlBase()?>/Login/comprobarSesion"
-            ahora: action="{{ route('login.post') }}"
-            @csrf reemplaza cualquier token manual que tuvieras
-        --}}
         <form action="{{ route('login.post') }}" method="POST">
             @csrf
 
@@ -29,7 +23,6 @@
                        id="email"
                        name="email"
                        placeholder="usuario@ejemplo.com"
-                       {{-- value="<?=$data['formData']['email'] ?? ''?>" --}}
                        value="{{ old('email') }}">
             </div>
 
@@ -42,19 +35,10 @@
                        placeholder="********">
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                    <label class="form-check-label" for="remember">Recordarme</label>
-                </div>
-                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
-            </div>
-
             <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
         </form>
 
         <div class="mt-4 text-center">
-            {{-- href="<?=$http->getUrlBase()?>/Registro" --}}
             <p>¿No tienes cuenta? <a href="{{ url('/registro') }}">Regístrate aquí</a></p>
         </div>
     </div>

@@ -5,12 +5,12 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class AuthAurora
+class AclAdmin
 {
     public function handle(Request $request, Closure $next)
     {
-        if (!session('userID')) {
-            return redirect()->route('login.form');
+        if (session('acl') !== 'Administrador') {
+            abort(403, 'Acceso restringido a administradores.');
         }
 
         return $next($request);

@@ -7,7 +7,6 @@
 {{-- HERO --}}
 <section class="hero text-center">
     <div class="container">
-        {{-- src="public/img/NombreyLogo.png" --}}
         <img src="{{ asset('img/NombreyLogo.png') }}" alt="Aurora EEG" class="hero-logo">
         <h1>Monitorización cerebral avanzada</h1>
         <p class="hero-slogan mt-2">Detectando el futuro de la salud neurológica</p>
@@ -115,34 +114,4 @@
         </div>
     </div>
 </section>
-
-{{-- CONTACTO --}}
-<section class="py-5">
-    <div class="container">
-        <div class="text-center mb-4">
-            <h2 style="color:#355a6d;">Contacto Institucional</h2>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <form action="{{ url('/contacto') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" name="nombre" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Mensaje</label>
-                        <textarea name="mensaje" class="form-control" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Enviar solicitud</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
 @endsection

@@ -33,7 +33,6 @@
 
         <div class="row g-4 align-items-center">
             <div class="col-md-6 text-center">
-                {{-- src="<?=$http->getUrlBase()?>/public/img/panel-control.png" --}}
                 <img src="{{ asset('img/panel-control.png') }}"
                      alt="Panel de Control Médico"
                      class="img-fluid"

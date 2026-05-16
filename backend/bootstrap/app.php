@@ -10,14 +10,11 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
-    // Registrar el middleware con alias 'auth.aurora'
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'auth.aurora' => \App\Http\Middleware\AuthAurora::class,
+            'acl.admin'   => \App\Http\Middleware\AclAdmin::class,
         ]);
-    })
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
