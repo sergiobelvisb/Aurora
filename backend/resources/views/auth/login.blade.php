@@ -24,7 +24,6 @@
                        id="email"
                        name="email"
                        placeholder="usuario@ejemplo.com"
-                       {{-- value="<?=$data['formData']['email'] ?? ''?>" --}}
                        value="{{ old('email') }}">
             </div>
 

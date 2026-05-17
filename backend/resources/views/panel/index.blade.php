@@ -375,6 +375,17 @@
     @endforeach
   </div>
 
+{{-- ── PANTALLA SELECCIÓN DE DURACIÓN ── --}}
+<div id="pantalla-inicio" style="display:none">
+  <div class="selector-card">
+    <h2>¿Cuánto tiempo dura el análisis?</h2>
+    <div class="opciones">
+      <button class="opcion" onclick="iniciar(5000)">5s <span>Prueba</span></button>
+      <button class="opcion" onclick="iniciar(30000)">30s</button>
+      <button class="opcion" onclick="iniciar(60000)">1m</button>
+      <button class="opcion" onclick="iniciar(300000)">5m</button>
+    </div>
+  </div>
 </div>
 
 {{-- ── MODAL PACIENTE ── --}}

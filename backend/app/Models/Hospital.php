@@ -12,15 +12,31 @@ class Hospital extends Model
     protected $table      = 'hospitales';
     protected $primaryKey = 'hospitalID';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'nombre',
         'ubicacion',
     ];
 
-    // Relación inversa
+    // Relaciones 
+
     public function usuarios()
     {
-        return $this->hasMany(UsuarioMedico::class, 'hospitalID', 'hospitalID');
+        return $this->hasMany(Usuario::class, 'hospitalID', 'hospitalID');
+    }
+
+    // Metodos de consulta
+
+    /**
+     * Devuelve todos los hospitales ordenados por nombre, solo con los campos
+     * necesarios para los selects de formulario.
+     */
+    public static function paraSelector(): \Illuminate\Database\Eloquent\Collection
+    {
+        return static::select('hospitalID', 'nombre', 'ubicacion')
+            ->orderBy('nombre')
+            ->get();
     }
 
     public static function paraSelector()

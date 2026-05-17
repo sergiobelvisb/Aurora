@@ -1,18 +1,20 @@
 <?php
 
-// app/Http/Controllers/LoginController.php
 namespace App\Http\Controllers;
 
 use App\Models\Usuario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
+
+
     public function index()
     {
         return view('auth.login');
     }
+
+    // Comprobacion de credenciales
 
     public function autenticar(Request $request)
     {
@@ -21,9 +23,9 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        $usuario = Usuario::where('email', $request->email)->first();
+        $usuario = Usuario::autenticar($request->email, $request->password);
 
-        if (!$usuario || !Hash::check($request->password, $usuario->password)) {
+        if (!$usuario) {
             return back()->withErrors(['email' => 'Credenciales incorrectas']);
         }
 
@@ -39,9 +41,10 @@ class LoginController extends Controller
         return redirect()->route('home');
     }
 
+    // Cierre de sesion
     public function logout()
     {
-        session()->flush();   // Equivale a session->destroy()
-        return redirect()->route('login.form');
+        session()->flush();
+        return redirect()->route('home');
     }
 }
