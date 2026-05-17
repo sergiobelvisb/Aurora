@@ -141,7 +141,7 @@ EEG Device (ESP32)
 - MySQL (AWS RDS)
 - JavaScript Vanilla
 - Docker
-- Amazon Web Services (EC2, VPC, RDS)
+- Amazon Web Services (ECS, VPC, RDS, ALB y más)
 
 ---
 
