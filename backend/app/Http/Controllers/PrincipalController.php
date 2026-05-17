@@ -10,4 +10,13 @@ class PrincipalController extends Controller
     {
         return view('public-pages.principal');
     }
+
+    public function profesionales()
+    {
+        return view('public-pages.profesionales');
+    }
+
+    public function tecnologia(){
+        return view ('public-pages.tecnologia');
+    }
 }

@@ -32,7 +32,7 @@ class LoginController extends Controller
             'userID'        => $usuario->userID,
             'username'      => $usuario->username,
             'nombreCompleto'=> $usuario->nombre,
-            'foto'          => '/img/pfp/' . $usuario->fotodeperfil,
+            'foto' => $usuario->fotodeperfil ?? 'default.png',
             'acl'           => $usuario->acl,
         ]);
 

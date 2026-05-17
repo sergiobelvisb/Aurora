@@ -3,62 +3,73 @@
 @section('title', 'Crear cuenta')
 
 @section('content')
-<div class="register-container">
-    <div class="register-card">
-        <h2 class="register-title">Crear cuenta</h2>
+<div class="login-container d-flex justify-content-center align-items-center">
+    <div class="login-card p-5 shadow-sm rounded">
+        <h2 class="text-center mb-4">Crear cuenta</h2>
 
-        {{-- if (!empty($data['error'])) --}}
         @if ($errors->any())
-            <div class="error-message">
+            <div class="alert alert-danger text-center">
                 {{ $errors->first() }}
             </div>
         @endif
 
-        {{--
-            action="<?=$http->getUrlBase()?>/Registro/registrarUsuario"
-        --}}
-        <form action="{{ route('registro.post') }}" method="POST" class="register-form">
+        <form action="{{ url()->secure(route('registro.post', [], false)) }}" method="POST">
             @csrf
 
-            <div class="form-row">
+            <div class="mb-3">
+                <label for="username" class="form-label">Usuario</label>
                 <input type="text"
-                       name="username"
-                       placeholder="Usuario"
+                       class="form-control @error('username') is-invalid @enderror"
+                       id="username" name="username"
+                       placeholder="Nombre de usuario"
                        value="{{ old('username') }}">
                 @error('username')
-                    <span class="text-danger small">{{ $message }}</span>
+                    <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div class="form-row two-columns">
-                <input type="text"
-                       name="nombre"
-                       placeholder="Nombre"
-                       value="{{ old('nombre') }}">
-                <input type="text"
-                       name="apellidos"
-                       placeholder="Apellidos"
-                       value="{{ old('apellidos') }}">
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre"
+                           placeholder="Nombre" value="{{ old('nombre') }}">
+                </div>
+                <div class="col">
+                    <label for="apellidos" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" id="apellidos" name="apellidos"
+                           placeholder="Apellidos" value="{{ old('apellidos') }}">
+                </div>
             </div>
 
-            <div class="form-row">
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo electrónico</label>
                 <input type="email"
-                       name="email"
-                       placeholder="Correo electrónico"
+                       class="form-control @error('email') is-invalid @enderror"
+                       id="email" name="email"
+                       placeholder="usuario@ejemplo.com"
                        value="{{ old('email') }}">
                 @error('email')
-                    <span class="text-danger small">{{ $message }}</span>
+                    <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div class="form-row two-columns">
-                <input type="password" name="password" placeholder="Contraseña">
-                <input type="password" name="password_confirmation" placeholder="Repetir contraseña">
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control"
+                           id="password" name="password" placeholder="********">
+                </div>
+                <div class="col">
+                    <label for="password_confirmation" class="form-label">Repetir contraseña</label>
+                    <input type="password" class="form-control"
+                           id="password_confirmation" name="password_confirmation" placeholder="********">
+                </div>
             </div>
 
-            <div class="form-row">
-                {{-- foreach ($data['hospitales'] as $hospital) --}}
-                <select name="hospital" id="hospital-select">
+            <div class="mb-3">
+                <label for="hospital-select" class="form-label">Hospital</label>
+                <select class="form-control @error('hospital') is-invalid @enderror"
+                        name="hospital" id="hospital-select">
                     <option value="">Selecciona un hospital</option>
                     @foreach ($hospitales as $hospital)
                         <option value="{{ $hospital['hospitalID'] }}"
@@ -68,18 +79,15 @@
                     @endforeach
                 </select>
                 @error('hospital')
-                    <span class="text-danger small">{{ $message }}</span>
+                    <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div class="form-row">
-                <button type="submit" class="register-button">Registrarse</button>
-            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrarse</button>
         </form>
 
         <div class="mt-4 text-center">
-            {{-- href="<?=$http->getUrlBase()?>/Login" --}}
-            <p>¿Ya tienes una cuenta? <a href="{{ route('login.form') }}">Inicia Sesión aquí</a></p>
+            <p>¿Ya tienes una cuenta? <a href="{{ route('login.form') }}">Inicia sesión aquí</a></p>
         </div>
     </div>
 </div>

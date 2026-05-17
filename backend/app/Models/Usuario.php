@@ -1,5 +1,5 @@
 <?php
-// app/Models/Usuario.php
+
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,65 +10,105 @@ class Usuario extends Authenticatable
     protected $table      = 'usuarios_medicos';
     protected $primaryKey = 'userID';
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'username', 'nombre', 'email', 'password', 'hospitalID', 'fotodeperfil', 'acl'
+        'username',
+        'nombre',
+        'apellido1',
+        'apellido2',
+        'email',
+        'password',
+        'acl',
+        'hospitalID',
+        'fotodeperfil',
     ];
 
     protected $hidden = ['password'];
 
-    // ──────────────────────────────────────────────
-    // Relaciones
-    // ──────────────────────────────────────────────
+    // Relaciones 
 
-    // getHospital($id) con JOIN manual
     public function hospital()
     {
-        return $this->belongsTo(Hospital::class, 'hospitalID');
-        // Uso: $usuario->hospital->nombre
+        return $this->belongsTo(Hospital::class, 'hospitalID', 'hospitalID');
     }
 
     public function pacientes()
     {
-        return $this->hasMany(Paciente::class, 'medicoID');
-        //  getPacientesByMedico($medicoID)
+        return $this->hasMany(Paciente::class, 'userID', 'userID');
     }
 
-    // ──────────────────────────────────────────────
-    // Métodos de negocio (los que no cubre Eloquent)
-    // ──────────────────────────────────────────────
+    // Scopes 
 
-    //  comprobarUsuario($email, $password)
-    public static function verificarCredenciales(string $email, string $password): bool
+    public function scopeMedicos($query)
+    {
+        return $query->where('acl', 'Medico');
+    }
+
+    public function scopeAdministradores($query)
+    {
+        return $query->where('acl', 'Administrador');
+    }
+
+    public function scopeRecientes($query, int $limit = 5)
+    {
+        return $query->orderByDesc('userID')->limit($limit);
+    }
+
+    // Métodos de negocio 
+
+    public function esAdministrador(): bool
+    {
+        return $this->acl === 'Administrador';
+    }
+
+    /**
+     * Verifica las credenciales y devuelve el usuario o null.
+     */
+    public static function autenticar(string $email, string $password): ?static
     {
         $usuario = static::where('email', $email)->first();
-        if (!$usuario) return false;
-        return Hash::check($password, $usuario->password);
+
+        if (!$usuario || !Hash::check($password, $usuario->password)) {
+            return null;
+        }
+
+        return $usuario;
     }
 
-    // cambiarFoto($id, $foto) — la lógica de ficheros va al Controller o un Service
-    public function actualizarFotoPerfil(string $nombreArchivo): bool
+    /**
+     * Datos de sesión listos para guardar en session([...]).
+     */
+    public function datosDeSesion(): array
     {
-        $this->fotodeperfil = $nombreArchivo;
-        return $this->save();
+        return [
+            'userID'         => $this->userID,
+            'username'       => $this->username,
+            'nombreCompleto' => $this->nombre,
+            'foto'           => '/img/pfp/' . $this->fotodeperfil,
+            'acl'            => $this->acl,
+        ];
     }
 
-    // cambiarPassword($id, $current, $new)
-    public function cambiarPassword(string $actual, string $nueva): bool
+    /**
+     * Actualiza la foto de perfil y devuelve el nombre del archivo guardado.
+     */
+    public function actualizarFoto(\Illuminate\Http\UploadedFile $archivo): string
     {
-        if (!Hash::check($actual, $this->password)) return false;
-        $this->password = Hash::make($nueva);
-        return $this->save();
+        $nombreFoto = $this->userID . '_' . time() . '.jpg';
+        $archivo->move(public_path('img/pfp'), $nombreFoto);
+        $this->fotodeperfil = $nombreFoto;
+        $this->save();
+
+        return $nombreFoto;
     }
 
-    // existeEmail / existeUsername
-    public static function existeEmail(string $email): bool
+    /**
+     * Actualiza la contraseña hasheada.
+     */
+    public function actualizarPassword(string $nuevaPassword): void
     {
-        return static::where('email', $email)->exists();
+        $this->password = Hash::make($nuevaPassword);
+        $this->save();
     }
-
-    public static function existeUsername(string $username): bool
-    {
-        return static::where('username', $username)->exists();
-    }
-    
 }

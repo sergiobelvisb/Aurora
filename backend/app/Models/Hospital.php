@@ -22,4 +22,9 @@ class Hospital extends Model
     {
         return $this->hasMany(UsuarioMedico::class, 'hospitalID', 'hospitalID');
     }
+
+    public static function paraSelector()
+    {
+        return self::select('hospitalID', 'nombre')->get();
+    }
 }

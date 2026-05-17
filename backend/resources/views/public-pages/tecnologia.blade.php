@@ -19,8 +19,8 @@
             </div>
             <div class="col-md-4">
                 <div class="card p-4 h-100">
-                    <h5>Procesamiento Inteligente de Datos</h5>
-                    <p>Algoritmos avanzados analizan patrones de ondas cerebrales, detectando posibles anomalías tempranas y ofreciendo insights clínicos valiosos.</p>
+                    <h5>Visualización y Gestión de Datos en Tiempo Real</h5>
+                    <p>El sistema permite recibir y representar en tiempo real las ondas cerebrales captadas por el dispositivo EEG mediante gráficas dinámicas accesibles desde la aplicación web. Esto facilita al personal médico observar la evolución de la actividad cerebral de forma inmediata y organizada durante cada sesión de monitorización.</p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -33,7 +33,6 @@
 
         <div class="row g-4 mt-5 align-items-center">
             <div class="col-md-6 text-center">
-                {{-- src="<?=$http->getUrlBase()?>/public/img/Logo.png" --}}
                 <img src="{{ asset('img/Logo.png') }}" alt="Aurora EEG" class="img-fluid" style="max-height: 400px;">
             </div>
             <div class="col-md-6">
@@ -44,7 +43,6 @@
                 </p>
                 <ul>
                     <li>✔ Dispositivos certificados</li>
-                    <li>✔ Reportes exportables en PDF o CSV</li>
                     <li>✔ Interfaz segura y cifrada</li>
                     <li>✔ Gestión multiusuario y roles diferenciados</li>
                 </ul>
@@ -60,8 +58,8 @@
             </div>
             <div class="col-md-4">
                 <div class="card p-4 h-100">
-                    <h5>Alertas Tempranas</h5>
-                    <p>Detección automática de patrones anormales en las ondas cerebrales para alertar a profesionales de forma inmediata.</p>
+                    <h5>Gestión de Sesiones de Monitorización</h5>
+                    <p>La plataforma permite iniciar y gestionar sesiones de monitorización cerebral asociadas a cada paciente, almacenando las mediciones realizadas y facilitando su posterior consulta desde la aplicación web.</p>
                 </div>
             </div>
             <div class="col-md-4">

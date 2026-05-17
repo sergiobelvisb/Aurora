@@ -25,16 +25,15 @@
             </div>
             <div class="col-md-4">
                 <div class="card p-4 h-100">
-                    <h5>Informes Exportables</h5>
-                    <p>Genera reportes clínicos en PDF o CSV para compartir fácilmente con otros profesionales o sistemas hospitalarios.</p>
+                    <h5>Mejora en la toma de decisiones clínicas</h5>
+                    <p>La visualización en tiempo real de la actividad cerebral permite al personal sanitario disponer de información inmediata durante la monitorización, facilitando la observación del estado del paciente en cada momento.</p>
                 </div>
             </div>
         </div>
 
         <div class="row g-4 align-items-center">
             <div class="col-md-6 text-center">
-                {{-- src="<?=$http->getUrlBase()?>/public/img/panel-control.png" --}}
-                <img src="{{ asset('img/panel-control.png') }}"
+                <img src="{{ asset('img/panel_de_control.png') }}"
                      alt="Panel de Control Médico"
                      class="img-fluid"
                      style="max-height: 400px;">
@@ -42,14 +41,13 @@
             <div class="col-md-6">
                 <h3>Panel de Control Médico</h3>
                 <p>
-                    Interfaz intuitiva que permite visualizar métricas cerebrales de pacientes en tiempo real.
-                    Filtra por edad, historial o condición para un análisis detallado y toma de decisiones rápida.
+                    Interfaz intuitiva que centraliza todas las sesiones EEG de tus pacientes. 
+                    Accede al historial de análisis, consulta métricas cerebrales detalladas y añade notas clínicas en cada sesión.
                 </p>
                 <ul>
                     <li>✔ Visualización clara de métricas EEG</li>
-                    <li>✔ Filtros avanzados y gráficos interactivos</li>
+                    <li>✔ Gráficos interactivos</li>
                     <li>✔ Gestión de múltiples pacientes simultáneamente</li>
-                    <li>✔ Exportación de datos y reportes completos</li>
                 </ul>
             </div>
         </div>
@@ -57,8 +55,8 @@
         <div class="row g-4 mt-5">
             <div class="col-md-4">
                 <div class="card p-4 h-100">
-                    <h5>Alertas Automatizadas</h5>
-                    <p>Recibe notificaciones inmediatas sobre anomalías detectadas en el EEG para actuar de manera proactiva.</p>
+                    <h5>Seguimiento contínuo del estado del paciente</h5>
+                    <p>La plataforma proporciona una visualización constante de los datos cerebrales durante la sesión, permitiendo al personal sanitario observar la evolución del paciente en tiempo real.</p>
                 </div>
             </div>
             <div class="col-md-4">
