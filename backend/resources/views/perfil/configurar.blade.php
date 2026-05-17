@@ -21,7 +21,7 @@
 
             {{-- ── FOTO ── --}}
             <div class="text-center mb-4">
-                <img src="{{ asset($fotodeperfil) }}"
+                <img src="{{ asset('img/pfp/' . $fotodeperfil) }}"
                      alt="Foto de perfil"
                      id="preview-foto"
                      class="rounded-circle border mb-3"

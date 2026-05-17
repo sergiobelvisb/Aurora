@@ -4,13 +4,24 @@
 
 @section('content')
 
+@push('styles')
+<style>
+    @media (max-width: 768px) {
+        .hero-logo {
+            width: 80%;
+            max-width: 260px;
+        }
+    }
+</style>
+
+@endpush
 {{-- HERO --}}
 <section class="hero text-center">
     <div class="container">
         <img src="{{ asset('img/NombreyLogo.png') }}" alt="Aurora EEG" class="hero-logo">
         <h1>Monitorización cerebral avanzada</h1>
         <p class="hero-slogan mt-2">Detectando el futuro de la salud neurológica</p>
-        <a href="{{ route('login.form') }}" class="btn btn-primary btn-lg mt-4">
+        <a href="{{ session('userID') ? route('panel.index') : route('login.form') }}" class="btn btn-primary btn-lg mt-4">
             Acceder a la plataforma
         </a>
     </div>
@@ -30,7 +41,7 @@
             </div>
             <div class="col-md-4">
                 <h2 class="fw-bold" style="color:#355a6d;">24/7</h2>
-                <p>Monitorización continua</p>
+                <p>Monitorización contínua</p>
             </div>
         </div>
     </div>
@@ -51,8 +62,8 @@
             </div>
             <div class="col-md-4">
                 <div class="card p-4 h-100">
-                    <h5>2. Procesamiento Inteligente</h5>
-                    <p>Algoritmos analizan patrones y detectan anomalías tempranas.</p>
+                    <h5>2. Integración en la Plataforma</h5>
+                    <p>Las señales captadas se sincronizan automáticamente con el historial clínico del paciente.</p>
                 </div>
             </div>
             <div class="col-md-4">
@@ -78,7 +89,6 @@
                 <ul>
                     <li>✔ Historiales centralizados</li>
                     <li>✔ Acceso seguro cifrado</li>
-                    <li>✔ Informes exportables</li>
                     <li>✔ Gestión de pacientes</li>
                 </ul>
             </div>

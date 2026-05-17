@@ -2,26 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Hospital;
-use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class PerfilController extends Controller
 {
+    // ── GET /perfil ────────────────────────────────────────────
     public function show()
     {
-        return view('perfil.perfil_show', $this->viewData($this->getUsuario()));
+        $user = $this->getUser();
+        return view('perfil.perfil_show', $this->viewData($user));
     }
 
+    // ── GET /perfil/configurar ─────────────────────────────────
     public function configurar()
     {
-        return view('perfil.configurar', $this->viewData($this->getUsuario()));
+        $user = $this->getUser();
+        return view('perfil.configurar', $this->viewData($user));
     }
 
-    // Actualiza los cambios del usuario 
-
+    // ── PATCH /perfil ──────────────────────────────────────────
     public function actualizar(Request $request)
     {
+        $userID   = session('userID');
+        $username = $request->input('username');
+
         $request->validate([
             'username'    => 'required|string|max:50',
             'nombre'      => 'required|string|max:100',
@@ -29,51 +35,70 @@ class PerfilController extends Controller
             'apellido2'   => 'nullable|string|max:100',
             'email'       => 'required|email|max:100',
             'password'    => 'nullable|string|min:6',
-            'foto_perfil' => 'nullable|file|mimetypes:image/jpeg,image/jpg|max:2048',
+            'foto_perfil' => 'nullable|file|mimetypes:image/jpeg,image/jpg,image/png|max:2048',
         ]);
 
-        $usuario = $this->getUsuario();
-
+        // Foto
         if ($request->hasFile('foto_perfil') && $request->file('foto_perfil')->isValid()) {
-            $nombreFoto = $usuario->actualizarFoto($request->file('foto_perfil'));
-            session(['foto' => 'img/pfp/' . $nombreFoto]);
+            $ext        = $request->file('foto_perfil')->getClientOriginalExtension();
+            $nombreFoto = $username . '.' . $ext;
+            $request->file('foto_perfil')->move(public_path('img/pfp'), $nombreFoto);
+            DB::update('UPDATE usuarios_medicos SET fotodeperfil = ? WHERE userID = ?', [$nombreFoto, $userID]);
+            session(['foto' => $nombreFoto]);
         }
 
-        $usuario->username  = $request->input('username');
-        $usuario->nombre    = $request->input('nombre');
-        $usuario->apellido1 = $request->input('apellido1');
-        $usuario->apellido2 = $request->input('apellido2');
-        $usuario->email     = $request->input('email');
-        $usuario->hospitalID = $request->input('hospitalID') ?: null;
+        DB::update(
+            'UPDATE usuarios_medicos
+             SET username = ?, nombre = ?, apellido1 = ?, apellido2 = ?, email = ?, hospitalID = ?
+             WHERE userID = ?',
+            [
+                $username,
+                $request->input('nombre'),
+                $request->input('apellido1'),
+                $request->input('apellido2'),
+                $request->input('email'),
+                $request->input('hospitalID') ?: null,
+                $userID,
+            ]
+        );
 
-        if ($usuario->esAdministrador() && $request->filled('acl')) {
-            $usuario->acl = $request->input('acl');
-        }
-
-        $usuario->save();
-        session(['username' => $usuario->username]);
+        session(['username' => $username]);
 
         if ($request->filled('password')) {
-            $usuario->actualizarPassword($request->input('password'));
+            DB::update(
+                'UPDATE usuarios_medicos SET password = ? WHERE userID = ?',
+                [Hash::make($request->input('password')), $userID]
+            );
+        }
+
+        if (session('acl') === 'Administrador' && $request->filled('acl')) {
+            DB::update(
+                'UPDATE usuarios_medicos SET acl = ? WHERE userID = ?',
+                [$request->input('acl'), $userID]
+            );
         }
 
         return redirect()->route('perfil.show')->with('success', 'Perfil actualizado correctamente.');
     }
 
-    // Cambia la foto del usuario
+    // ── POST /perfil/foto ──────────────────────────────────────
     public function cambiarFoto(Request $request)
     {
-        $request->validate(['foto_perfil' => 'required|file|mimetypes:image/jpeg,image/jpg|max:2048']);
+        $userID   = session('userID');
+        $username = session('username');
 
-        $usuario    = $this->getUsuario();
-        $nombreFoto = $usuario->actualizarFoto($request->file('foto_perfil'));
-        session(['foto' => 'img/pfp/' . $nombreFoto]);
+        $request->validate(['foto_perfil' => 'required|file|mimetypes:image/jpeg,image/jpg,image/png|max:2048']);
+
+        $ext        = $request->file('foto_perfil')->getClientOriginalExtension();
+        $nombreFoto = $username . '.' . $ext;
+        $request->file('foto_perfil')->move(public_path('img/pfp'), $nombreFoto);
+        DB::update('UPDATE usuarios_medicos SET fotodeperfil = ? WHERE userID = ?', [$nombreFoto, $userID]);
+        session(['foto' => $nombreFoto]);
 
         return redirect()->route('perfil.show')->with('success', 'Foto actualizada.');
     }
 
-    // Actualiza el nombre
-
+    // ── PATCH /perfil/nombre ───────────────────────────────────
     public function actualizarNombre(Request $request)
     {
         $request->validate([
@@ -81,73 +106,81 @@ class PerfilController extends Controller
             'apellido1' => 'required|string|max:100',
             'apellido2' => 'nullable|string|max:100',
         ]);
-
-        $usuario = $this->getUsuario();
-        $usuario->nombre    = $request->input('nombre');
-        $usuario->apellido1 = $request->input('apellido1');
-        $usuario->apellido2 = $request->input('apellido2');
-        $usuario->save();
-
+        DB::update(
+            'UPDATE usuarios_medicos SET nombre = ?, apellido1 = ?, apellido2 = ? WHERE userID = ?',
+            [$request->input('nombre'), $request->input('apellido1'), $request->input('apellido2'), session('userID')]
+        );
         return redirect()->route('perfil.show')->with('success', 'Nombre actualizado.');
     }
 
-
-    // Actualiza el email
+    // ── PATCH /perfil/email ────────────────────────────────────
     public function actualizarEmail(Request $request)
     {
         $request->validate(['email' => 'required|email|max:100']);
-
-        $usuario = $this->getUsuario();
-        $usuario->email = $request->input('email');
-        $usuario->save();
-
+        DB::update(
+            'UPDATE usuarios_medicos SET email = ? WHERE userID = ?',
+            [$request->input('email'), session('userID')]
+        );
         return redirect()->route('perfil.show')->with('success', 'Email actualizado.');
     }
 
-    // Actualiza el password
+    // ── PATCH /perfil/password ─────────────────────────────────
     public function actualizarPassword(Request $request)
     {
         $request->validate([
             'password'              => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required',
         ]);
-
-        $this->getUsuario()->actualizarPassword($request->input('password'));
-
+        DB::update(
+            'UPDATE usuarios_medicos SET password = ? WHERE userID = ?',
+            [Hash::make($request->input('password')), session('userID')]
+        );
         return redirect()->route('perfil.show')->with('success', 'Contraseña actualizada.');
     }
 
-
-    // Actualiza el hospital
+    // ── PATCH /perfil/hospital ─────────────────────────────────
     public function actualizarHospital(Request $request)
     {
-        $usuario = $this->getUsuario();
-        $usuario->hospitalID = $request->input('hospitalID') ?: null;
-        $usuario->save();
-
+        DB::update(
+            'UPDATE usuarios_medicos SET hospitalID = ? WHERE userID = ?',
+            [$request->input('hospitalID') ?: null, session('userID')]
+        );
         return redirect()->route('perfil.show')->with('success', 'Hospital actualizado.');
     }
 
-    // Helpers privados 
-
-    private function getUsuario(): Usuario
+    // ── Helpers ────────────────────────────────────────────────
+    private function getUser(): array
     {
-        return Usuario::with('hospital')->findOrFail(session('userID'));
+        $user = DB::select('SELECT * FROM usuarios_medicos WHERE userID = ?', [session('userID')]);
+        return $user ? (array) $user[0] : [];
     }
 
-    private function viewData(Usuario $usuario): array
+    private function viewData(array $user): array
     {
+        $hospital = null;
+        if (!empty($user['hospitalID'])) {
+            $h        = DB::select('SELECT * FROM hospitales WHERE hospitalID = ?', [$user['hospitalID']]);
+            $hospital = $h ? (array) $h[0] : null;
+        }
+        $hospitales = array_map(
+            fn($h) => (array) $h,
+            DB::select('SELECT hospitalID, nombre, ubicacion FROM hospitales ORDER BY nombre')
+        );
+
+        // Solo el nombre del archivo — la ruta se construye en la vista con asset()
+        $nombreFoto = $user['fotodeperfil'] ?? 'default.png';
+
         return [
-            'usuario'      => $usuario->username,
-            'nombre'       => $usuario->nombre,
-            'apellido1'    => $usuario->apellido1,
-            'apellido2'    => $usuario->apellido2,
-            'email'        => $usuario->email,
-            'fotodeperfil' => 'img/pfp/' . ($usuario->fotodeperfil ?? 'default.png'),
-            'acl'          => $usuario->acl ?? 'Medico',
-            'admin'        => $usuario->esAdministrador(),
-            'hospital'     => $usuario->hospital,
-            'hospitales'   => Hospital::paraSelector(),
+            'usuario'      => $user['username']  ?? '',
+            'nombre'       => $user['nombre']    ?? '',
+            'apellido1'    => $user['apellido1'] ?? '',
+            'apellido2'    => $user['apellido2'] ?? '',
+            'email'        => $user['email']     ?? '',
+            'fotodeperfil' => $nombreFoto,
+            'acl'          => $user['acl']       ?? 'Medico',
+            'admin'        => ($user['acl']      ?? '') === 'Administrador',
+            'hospital'     => $hospital,
+            'hospitales'   => $hospitales,
         ];
     }
 }

@@ -8,6 +8,10 @@ use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\AdminUsuariosController;
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 // Rutas públicas
 Route::get('/', [PrincipalController::class, 'index'])->name('home');
 Route::get('/tecnologia', [PrincipalController::class, 'tecnologia'])->name('tecnologia');
@@ -20,12 +24,20 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/registro', [RegistroController::class, 'index'])->name('registro.form');
 Route::post('/registro', [RegistroController::class, 'registrar'])->name('registro.post');
 
+Route::get('/politica-de-privacidad', function () {
+    return view('legal.privacidad');
+})->name('privacidad');
+
+Route::get('/aviso-legal', function () {
+    return view('legal.aviso');
+})->name('legal');
+
 // Rutas protegidas
 Route::middleware('auth.aurora')->group(function () {
 
     Route::prefix('panel')->name('panel.')->group(function () {
         Route::get('/', [PanelController::class, 'index'])->name('index');
-        Route::get('/resumen', [PanelController::class, 'resumen'])->name('resumen');
+        Route::get('/resumen/{pacienteID}/{sesionID}', [PanelController::class, 'resumen'])->name('resumen');
         Route::post('/guardarSesion', [PanelController::class, 'guardarSesion'])->name('guardarSesion');
         Route::post('/eliminarSesion', [PanelController::class, 'eliminarSesion'])->name('eliminarSesion');
         Route::post('/crearPaciente', [PanelController::class, 'crearPaciente'])->name('crearPaciente');

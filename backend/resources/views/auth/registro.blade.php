@@ -13,7 +13,7 @@
             </div>
         @endif
 
-        <form action="{{ route('registro.post') }}" method="POST">
+        <form action="{{ url()->secure(route('registro.post', [], false)) }}" method="POST">
             @csrf
 
             <div class="mb-3">
@@ -21,7 +21,7 @@
                 <input type="text"
                        class="form-control @error('username') is-invalid @enderror"
                        id="username" name="username"
-                       placeholder="nombre de usuario"
+                       placeholder="Nombre de usuario"
                        value="{{ old('username') }}">
                 @error('username')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -87,7 +87,7 @@
         </form>
 
         <div class="mt-4 text-center">
-            <p>¿Ya tienes una cuenta? <a href="{{ route('login.form') }}">Inicia Sesión aquí</a></p>
+            <p>¿Ya tienes una cuenta? <a href="{{ route('login.form') }}">Inicia sesión aquí</a></p>
         </div>
     </div>
 </div>

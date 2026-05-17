@@ -29,7 +29,14 @@ class LoginController extends Controller
             return back()->withErrors(['email' => 'Credenciales incorrectas']);
         }
 
-        session($usuario->datosDeSesion());
+        // Equivale a: session->set('userID'), session->set('username'), etc.
+        session([
+            'userID'        => $usuario->userID,
+            'username'      => $usuario->username,
+            'nombreCompleto'=> $usuario->nombre,
+            'foto' => $usuario->fotodeperfil ?? 'default.png',
+            'acl'           => $usuario->acl,
+        ]);
 
         return redirect()->route('home');
     }

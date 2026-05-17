@@ -17,11 +17,11 @@ class PanelController extends Controller
 
     // Vista de resumen de una sesion 
 
-    public function resumen(Request $request)
+    public function resumen($pacienteID, $sesionID)
     {
-        $sesion = Sesion::with('paciente')->findOrFail($request->query('sesionID'));
+        $sesion = Sesion::with('paciente')->findOrFail($sesionID);
 
-        if ($request->query('pacienteID') && $sesion->pacienteID != $request->query('pacienteID')) {
+        if ($sesion->pacienteID != $pacienteID) {
             abort(403, 'Acceso no permitido');
         }
 

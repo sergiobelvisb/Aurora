@@ -4,6 +4,25 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/panel.css') }}">
+<style>
+  .btn-analisis {
+    padding: 8px 18px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+    transition: opacity 0.15s, transform 0.1s !important;
+    box-shadow: none !important;
+  }
+  .btn-analisis:hover { opacity: 0.88 !important; transform: translateY(-1px) !important; }
+  .btn-terminar  { background: #2563EB !important; color: #fff !important; }
+  .btn-terminar:hover { background: #1d4ed8 !important; color: #fff !important; }
+</style>
 @endpush
 
 @section('content')
@@ -36,7 +55,7 @@
       @endif
     </div>
     <a href="{{ url('/panel') }}" style="text-decoration:none">
-      <button class="btn-analisis btn-cancelar">← Volver</button>
+      <button class="btn-analisis btn-terminar">Volver</button>
     </a>
   </div>
 

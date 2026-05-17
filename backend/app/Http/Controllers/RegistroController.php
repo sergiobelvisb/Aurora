@@ -6,6 +6,9 @@ use App\Models\Hospital;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\UsuarioMedico;
+use App\Models\Hospital;
+use Illuminate\Support\Facades\DB;
 
 class RegistroController extends Controller
 {
@@ -29,17 +32,23 @@ class RegistroController extends Controller
         ]);
 
         $partes = explode(' ', trim($request->apellidos), 2);
+        $apellido1 = $partes[0];
+        $apellido2 = $partes[1] ?? null;
 
-        Usuario::create([
-            'username'  => $request->username,
-            'nombre'    => $request->nombre,
-            'apellido1' => $partes[0],
-            'apellido2' => $partes[1] ?? null,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-            'acl'       => 'Medico',
-            'hospitalID'=> $request->hospital,
-        ]);
+        DB::insert(
+            'INSERT INTO usuarios_medicos (username, nombre, apellido1, apellido2, email, password, acl, hospitalID)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [
+                $request->username,
+                $request->nombre,
+                $apellido1,
+                $apellido2,
+                $request->email,
+                Hash::make($request->password),
+                'Medico',
+                $request->hospital,
+            ]
+        );
 
         return redirect()->route('login.form')
             ->with('success', 'Cuenta creada. Inicia sesión.');

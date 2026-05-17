@@ -18,7 +18,7 @@
 
     {{-- Cabecera --}}
     <div class="d-flex align-items-center gap-4 mb-4">
-        <img src="{{ asset($fotodeperfil) }}"
+            <img src="{{ asset('img/pfp/' . session('foto', 'default.png')) }}"
              alt="Foto de perfil"
              class="rounded-circle border"
              style="width:90px; height:90px; object-fit:cover">

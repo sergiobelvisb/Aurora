@@ -38,4 +38,9 @@ class Hospital extends Model
             ->orderBy('nombre')
             ->get();
     }
+
+    public static function paraSelector()
+    {
+        return self::select('hospitalID', 'nombre')->get();
+    }
 }

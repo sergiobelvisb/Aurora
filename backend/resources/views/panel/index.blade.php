@@ -3,8 +3,6 @@
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/panel.css') }}">
 <style>
-  body { background: #f3f4f6 !important; }
-
   /* ── Contenedor principal ── */
   #pantalla-pacientes {
     max-width: 860px;
@@ -19,10 +17,10 @@
     align-items: center;
     margin-bottom: 24px;
   }
+
   .pacientes-header h2 {
     margin: 0;
     font-size: 1.9rem;
-    font-weight: 800;
     color: #111827;
   }
 
@@ -115,8 +113,8 @@
     box-shadow: none !important;
   }
   .btn-analisis:hover { opacity: 0.88 !important; transform: translateY(-1px) !important; }
-  .btn-terminar  { background: #6366f1 !important; color: #fff !important; }
-  .btn-terminar:hover { color: #fff !important; }
+  .btn-terminar  { background: #2563EB !important; color: #fff !important; }
+  .btn-terminar:hover { background: #1d4ed8 !important; color: #fff !important; }
   .btn-cancelar  { background: #f3f4f6 !important; color: #374151 !important; border: 1px solid #e5e7eb !important; }
   .btn-cancelar:hover { color: #374151 !important; }
 
@@ -125,6 +123,12 @@
     border-top: 1px solid #f3f4f6;
     background: #fafafa;
   }
+
+  .sesiones-lista .aviso-vacio {
+    border-radius: 0;
+    margin: 0;
+  }
+
   .sesion-vacia {
     padding: 12px 20px;
     font-size: 0.85rem;
@@ -192,8 +196,8 @@
     transition: border-color 0.15s !important;
   }
   .modal-field input:focus {
-    border-color: #6366f1 !important;
-    box-shadow: 0 0 0 2px rgba(99,102,241,0.15) !important;
+    border-color: #2563EB !important;
+    box-shadow: 0 0 0 2px rgba(37,99,235,0.15) !important;
   }
   .modal-botones { display: flex; justify-content: flex-end; gap: 10px; }
 
@@ -237,7 +241,7 @@
   #pantalla-grafica { max-width: 960px; margin: 24px auto; padding: 0 20px; }
   #barra-progreso-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
   #barra-track { flex: 1; height: 10px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
-  #barra-progreso { height: 100%; width: 0%; background: #6366f1; border-radius: 99px; transition: width 0.4s; }
+  #barra-progreso { height: 100%; width: 0%; background: #2563EB; border-radius: 99px; transition: width 0.4s; }
   #tiempo-restante { font-size: 0.9rem; color: #6b7280; min-width: 48px; text-align: right; }
 
   .valores { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
@@ -269,6 +273,44 @@
   .resumen-header h2 { margin: 0; font-size: 1.5rem; font-weight: 800; }
   #resumen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 16px; margin-bottom: 20px; }
   #botones-resumen { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+
+  @media (max-width: 640px) {
+  .paciente-row {
+    flex-wrap: wrap;
+  }
+
+  .paciente-info {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .paciente-nombre {
+    white-space: normal;
+    width: 100%;
+  }
+
+  .paciente-tel {
+    white-space: normal;
+  }
+
+  .paciente-acciones {
+    width: 100%;
+    justify-content: flex-end;
+    padding-top: 8px;
+    border-top: 1px solid #f3f4f6;
+  }
+}
+
+.aviso-vacio {
+  background: #e5e7eb;
+  color: #374151;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 0.9rem;
+  text-align: center;
+  font-style: italic;
+}
+
 </style>
 @endpush
 
@@ -283,6 +325,9 @@
   </div>
 
   <div class="pacientes-lista">
+    @if (empty($pacientes))
+      <div class="aviso-vacio">Sin pacientes registrados aún. Añade tu primer paciente.</div>
+    @endif
     @foreach ($pacientes as $p)
     <div class="paciente-item" id="paciente-{{ $p['pacienteID'] }}">
 
@@ -307,28 +352,40 @@
 
       {{-- Desplegable sesiones --}}
       <div class="sesiones-lista" id="sesiones-{{ $p['pacienteID'] }}" style="display:none">
-        @if (empty($p['sesiones']))
-          <div class="sesion-vacia">Sin análisis registrados</div>
-        @else
-          @foreach ($p['sesiones'] as $s)
-            <div class="sesion-item">
-              <a style="flex:1; text-decoration:none; color:inherit; display:flex; gap:16px;"
-                 href="{{ route('panel.resumen', ['pacienteID' => $p['pacienteID'], 'sesionID' => $s['sesionID']]) }}">
-                <span>📅 {{ \Carbon\Carbon::parse($s['fecha_hora_inicio'])->format('d/m/Y H:i') }}</span>
-                <span>⏱ {{ $s['duracion'] }}s</span>
-              </a>
-              <button class="btn-icono btn-eliminar"
-                      title="Eliminar sesión"
-                      onclick="eliminarSesion({{ $s['sesionID'] }})">✕</button>
-            </div>
-          @endforeach
-        @endif
+      @if (empty($p['sesiones']) || is_null($p['sesiones']))
+        <div class="sesion-vacia aviso-vacio">Sin análisis registrados para este paciente.</div>
+      @else
+        @foreach ($p['sesiones'] as $s)
+          <div class="sesion-item">
+            <a style="flex:1; text-decoration:none; color:inherit; display:flex; gap:16px;"
+              href="{{ route('panel.resumen', ['pacienteID' => $p['pacienteID'], 'sesionID' => $s['sesionID']]) }}">
+              <span>📅 {{ \Carbon\Carbon::parse($s['fecha_hora_inicio'])->format('d/m/Y H:i') }}</span>
+              <span>⏱ {{ $s['duracion'] }}s</span>
+            </a>
+            <button class="btn-icono btn-eliminar"
+                    title="Eliminar sesión"
+                    onclick="eliminarSesion({{ $s['sesionID'] }})">✕</button>
+          </div>
+        @endforeach
+      @endif
+    </div>
       </div>
 
     </div>
     @endforeach
   </div>
 
+{{-- ── PANTALLA SELECCIÓN DE DURACIÓN ── --}}
+<div id="pantalla-inicio" style="display:none">
+  <div class="selector-card">
+    <h2>¿Cuánto tiempo dura el análisis?</h2>
+    <div class="opciones">
+      <button class="opcion" onclick="iniciar(5000)">5s <span>Prueba</span></button>
+      <button class="opcion" onclick="iniciar(30000)">30s</button>
+      <button class="opcion" onclick="iniciar(60000)">1m</button>
+      <button class="opcion" onclick="iniciar(300000)">5m</button>
+    </div>
+  </div>
 </div>
 
 {{-- ── MODAL PACIENTE ── --}}
@@ -624,7 +681,7 @@ function iniciarWS() {
   if (!fechaInicioAnalisis) {
     fechaInicioAnalisis = new Date().toISOString().slice(0,19).replace('T',' ');
   }
-  ws = new WebSocket("ws://192.168.1.135:8080");
+  ws = new WebSocket("wss://aurora-eeg.com/ws");
   ws.onopen    = () => console.log("Conectado al WebSocket");
   ws.onerror   = (e) => console.error("Error WS:", e);
   ws.onclose   = () => console.log("WebSocket cerrado");
@@ -689,15 +746,39 @@ function finalizarAnalisis() {
 // DATOS
 // ─────────────────────────────────────────────
 
+function convertirOnda(valor, minHz, maxHz, minRaw, maxRaw) {
+  const minRawExt = minRaw * 0.3;
+  const maxRawExt = maxRaw * 1.5;
+
+  valor = Math.max(minRawExt, Math.min(valor, maxRawExt));
+
+  const normalizado =
+    (Math.log10(valor) - Math.log10(minRawExt)) /
+    (Math.log10(maxRawExt) - Math.log10(minRawExt));
+
+  const margen = (maxHz - minHz) * 0.3;
+
+  return (minHz - margen) + normalizado * ((maxHz + margen) - (minHz - margen));
+}
+
 function actualizarGrafica(d) {
-  const hora  = new Date().toLocaleTimeString();
-  const alpha = Math.log10(d.lowAlpha || 1) + Math.log10(d.highAlpha || 1);
-  const beta  = Math.log10(d.lowBeta  || 1) + Math.log10(d.highBeta  || 1);
-  const gamma = Math.log10(d.lowGamma || 1) + Math.log10(d.highGamma || 1);
+  const hora = new Date().toLocaleTimeString();
+
+  const logDelta     = convertirOnda(d.delta     || 1, 0.5,  4,  100000, 2000000);
+  const logTheta     = convertirOnda(d.theta     || 1, 4,    8,  50000,  1500000);
+  const logLowAlpha  = convertirOnda(d.lowAlpha  || 1, 8,    10, 50000,  600000);
+  const logHighAlpha = convertirOnda(d.highAlpha || 1, 10,   12, 50000,  700000);
+  const logLowBeta   = convertirOnda(d.lowBeta   || 1, 12,   21, 30000,  800000);
+  const logHighBeta  = convertirOnda(d.highBeta  || 1, 21,   30, 30000,  1000000);
+  const logLowGamma  = convertirOnda(d.lowGamma  || 1, 30,   50, 30000,  1000000);
+
+  const alpha = (logLowAlpha + logHighAlpha) / 2;
+  const beta  = (logLowBeta  + logHighBeta)  / 2;
+  const gamma = logLowGamma;
 
   datos.labels.push(hora);
-  datos.datasets[0].data.push(Math.log10(d.delta || 1));
-  datos.datasets[1].data.push(Math.log10(d.theta || 1));
+  datos.datasets[0].data.push(logDelta);
+  datos.datasets[1].data.push(logTheta);
   datos.datasets[2].data.push(alpha);
   datos.datasets[3].data.push(beta);
   datos.datasets[4].data.push(gamma);
@@ -711,13 +792,13 @@ function actualizarGrafica(d) {
 
 function actualizarValores(d) {
   const vals = {
-    delta:     Math.log10(d.delta     || 1),
-    theta:     Math.log10(d.theta     || 1),
-    lowAlpha:  Math.log10(d.lowAlpha  || 1),
-    highAlpha: Math.log10(d.highAlpha || 1),
-    lowBeta:   Math.log10(d.lowBeta   || 1),
-    highBeta:  Math.log10(d.highBeta  || 1),
-    lowGamma:  Math.log10(d.lowGamma  || 1),
+    delta:     convertirOnda(d.delta     || 1, 0.5, 4,  100000, 2000000),
+    theta:     convertirOnda(d.theta     || 1, 4,   8,  50000,  1500000),
+    lowAlpha:  convertirOnda(d.lowAlpha  || 1, 8,   10, 50000,  600000),
+    highAlpha: convertirOnda(d.highAlpha || 1, 10,  12, 50000,  700000),
+    lowBeta:   convertirOnda(d.lowBeta   || 1, 12,  21, 30000,  800000),
+    highBeta:  convertirOnda(d.highBeta  || 1, 21,  30, 30000,  1000000),
+    lowGamma:  convertirOnda(d.lowGamma  || 1, 30,  50, 30000,  1000000),
   };
   Object.entries(vals).forEach(([k, v]) => {
     const el = document.getElementById(k);

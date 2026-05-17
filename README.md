@@ -1,4 +1,4 @@
-# Aurora – EEG Real-Time Monitoring System
+# [Aurora](https://aurora-eeg.com/) – EEG Real-Time Monitoring System 
 
 Aurora es una aplicación web orientada al ámbito médico que permite la monitorización en tiempo real de la actividad cerebral mediante dispositivos EEG conectados a un sistema distribuido. El sistema está diseñado para ayudar a profesionales sanitarios a observar la actividad cerebral de pacientes en tiempo real, con el objetivo de explorar cómo la tecnología puede facilitar el análisis de señales cerebrales y apoyar procesos de diagnóstico o seguimiento clínico.
 
@@ -67,11 +67,11 @@ Tecnologías:
 
 El sistema está desplegado en Amazon Web Services:
 
-- EC2 (Ubuntu con Docker) para backend y servidor Node.js
+- ECS (Servicios con Docker) para backend y servidor Node.js
 - RDS (MySQL) en red privada
 - VPC para segmentación de red
-- Subred pública para servicios accesibles
-- Subred privada para base de datos
+- Subred pública para balanceador de carga
+- Subred privada para servicios de backend, comunicación en tiempo real y base de datos
 
 ---
 
