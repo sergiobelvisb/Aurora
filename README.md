@@ -1,5 +1,7 @@
 # [Aurora](https://aurora-eeg.com/) – EEG Real-Time Monitoring System 
 
+Enlace a la página Aurora EEG: https://aurora-eeg.com/
+
 Aurora es una aplicación web orientada al ámbito médico que permite la monitorización en tiempo real de la actividad cerebral mediante dispositivos EEG conectados a un sistema distribuido. El sistema está diseñado para ayudar a profesionales sanitarios a observar la actividad cerebral de pacientes en tiempo real, con el objetivo de explorar cómo la tecnología puede facilitar el análisis de señales cerebrales y apoyar procesos de diagnóstico o seguimiento clínico.
 
 La aplicación permite gestionar pacientes, iniciar sesiones de monitorización y visualizar la evolución de las ondas cerebrales en directo, sin necesidad de recargar la página. Todo el sistema está diseñado para funcionar de forma continua y con baja latencia, simulando un entorno lo más cercano posible a una herramienta real de monitorización médica.
