@@ -14,19 +14,6 @@ COLLATE utf8mb4_general_ci;
 USE `aurora`;
 
 -- =========================================================
--- Usuario RDS
--- =========================================================
-
---DROP USER IF EXISTS 'admin'@'%';
-
---CREATE USER 'admin'@'%'
---IDENTIFIED BY 'PalomoSteven115';
-
---GRANT ALL PRIVILEGES ON `aurora`.* TO 'admin'@'%';
-
---FLUSH PRIVILEGES;
-
--- =========================================================
 -- Tabla hospitales
 -- =========================================================
 
